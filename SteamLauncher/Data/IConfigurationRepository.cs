@@ -1,4 +1,6 @@
-﻿namespace SteamLauncher.Domain.Data
+﻿using SteamLauncher.Domain.Configuration;
+
+namespace SteamLauncher.Domain.Data
 {
     public interface IConfigurationRepository : IRepository<IConfigurationElement, string>
     {

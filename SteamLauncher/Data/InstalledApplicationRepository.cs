@@ -10,8 +10,6 @@ namespace SteamLauncher.Domain.Data
     {
         private IConfigurationRepository _configurationRepository;
         private List<IApplication> _applications;
-        private string _applicationsPath;
-        private string _fileExtension;
         private FileSystemWatcher _watcher;
 
         // TODO: this needs to be put into a catagory importer or something simliar
@@ -25,16 +23,11 @@ namespace SteamLauncher.Domain.Data
         
         private const char NUL = (char)0x00;
         private const char SOH = (char)0x01;
-        private readonly Regex ApplicationIconNameRegex = new Regex(string.Format("name{0}*.{1}clienticon{0}*.{1}", NUL, SOH));
+        private readonly Regex ApplicationIconIdRegex = new Regex(string.Format("name{0}*.{1}clienticon{0}*.{1}", NUL, SOH));
 
         // TODO: need to enforce the configuration repository to provide only application settings
-        public InstalledApplicationRepository(string applicationsPath, string fileExtension, IConfigurationRepository configurationRepository)
+        public InstalledApplicationRepository(IConfigurationRepository configurationRepository)
         {
-            if (!Directory.Exists(applicationsPath))
-                throw new ArgumentException(string.Format("The path {0} does not exist.", applicationsPath));
-
-            _applicationsPath = applicationsPath;
-            _fileExtension = fileExtension;
             _configurationRepository = configurationRepository;
             _applications = new List<IApplication>();
             _watcher = new FileSystemWatcher(_applicationsPath, string.Format("*.{0}", _fileExtension));

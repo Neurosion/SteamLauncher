@@ -48,10 +48,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineSteamProxy.cs" />
-    <Compile Include="Data\ApplicationConfigurationElement.cs" />
-    <Compile Include="Data\ApplicationConfigurationRepository.cs" />
-    <Compile Include="Data\IConfigurationElement.cs" />
+    <Compile Include="Configuration\ConfigurationReader.cs" />
+    <Compile Include="Configuration\IConfigurationElementReader.cs" />
+    <Compile Include="Configuration\ConfigurationElement.cs" />
+    <Compile Include="Data\ConfigurationRepository.cs" />
+    <Compile Include="Configuration\IConfigurationElement.cs" />
+    <Compile Include="Data\ConfigurationResourceLocator.cs" />
     <Compile Include="Data\IConfigurationRepository.cs" />
+    <Compile Include="Data\IConfigurationResourceLocator.cs" />
+    <Compile Include="Data\IResourceLocator.cs" />
     <Compile Include="Data\RepositoryInstaller.cs" />
     <Compile Include="Configuration\DependencyInjectionConfiguration.cs" />
     <Compile Include="Data\IApplicationRepository.cs" />
