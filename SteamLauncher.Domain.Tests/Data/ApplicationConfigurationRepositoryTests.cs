@@ -10,10 +10,12 @@ namespace SteamLauncher.Domain.Tests.Data
     [TestFixture]
     public class ApplicationConfigurationRepositoryTests
     {
+        private const string TestExtension = "tst";
+
         [Test]
         public void GetWithProvidedIdReturnsNullWhenNoMatchingConfigurationExists()
         {
-            var repository = new ApplicationConfigurationRepository(Environment.CurrentDirectory);
+            var repository = new ConfigurationRepository(Environment.CurrentDirectory, TestExtension);
             var value = repository.Get("test");
 
             Assert.IsNull(value);
@@ -22,7 +24,7 @@ namespace SteamLauncher.Domain.Tests.Data
         [Test]
         public void GetReturnsEmptyWhenNoMatchingConfigurationsExist()
         {
-            var repository = new ApplicationConfigurationRepository(Environment.CurrentDirectory);
+            var repository = new ConfigurationRepository(Environment.CurrentDirectory, TestExtension);
             var value = repository.Get();
 
             Assert.IsEmpty(value);
@@ -33,7 +35,7 @@ namespace SteamLauncher.Domain.Tests.Data
         {
             AssertFileBasedTest("test", testFileName =>
                 {
-                    var repository = new ApplicationConfigurationRepository(Environment.CurrentDirectory);
+                    var repository = new ConfigurationRepository(Environment.CurrentDirectory, TestExtension);
                     var value = repository.Get(testFileName);
                     Assert.IsNotNull(value);
                 });
@@ -44,7 +46,7 @@ namespace SteamLauncher.Domain.Tests.Data
         {
             AssertFileBasedTest("test", testFileName =>
                 {
-                    var repository = new ApplicationConfigurationRepository(Environment.CurrentDirectory);
+                    var repository = new ConfigurationRepository(Environment.CurrentDirectory, TestExtension);
                     var value = repository.Get(testFileName);
 
                     Assert.AreEqual("RootElement", value.Name);
@@ -56,7 +58,7 @@ namespace SteamLauncher.Domain.Tests.Data
         {
             AssertFileBasedTest("test", testFileName =>
                 {
-                    var repository = new ApplicationConfigurationRepository(Environment.CurrentDirectory);
+                    var repository = new ConfigurationRepository(Environment.CurrentDirectory, TestExtension);
                     var value = repository.Get(testFileName);
 
                     Assert.AreEqual(3, value.Attributes.Count);
@@ -74,7 +76,7 @@ namespace SteamLauncher.Domain.Tests.Data
         {
             AssertFileBasedTest("test", testFileName =>
                 {
-                    var repository = new ApplicationConfigurationRepository(Environment.CurrentDirectory);
+                    var repository = new ConfigurationRepository(Environment.CurrentDirectory, TestExtension);
                     var value = repository.Get(testFileName);
 
                     Assert.AreEqual(2, value.Children.Count);
@@ -113,7 +115,7 @@ namespace SteamLauncher.Domain.Tests.Data
         {
             DeleteTestFile(name);
 
-            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, name + ".acf"),
+            File.WriteAllText(Path.Combine(Environment.CurrentDirectory, name + "." + TestExtension),
                               "\"RootElement\"" + Environment.NewLine +
                               "{" + Environment.NewLine +
                               "\t\"AttributeOne\"\t\t\"1\"" + Environment.NewLine +
@@ -133,7 +135,7 @@ namespace SteamLauncher.Domain.Tests.Data
 
         private void DeleteTestFile(string name)
         {
-            var filePath = Path.Combine(Environment.CurrentDirectory, name + ".acf");
+            var filePath = Path.Combine(Environment.CurrentDirectory, name + "." + TestExtension);
             if (File.Exists(filePath))
                 File.Delete(filePath);
         }

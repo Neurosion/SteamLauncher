@@ -10,13 +10,20 @@ namespace SteamLauncher.Domain.Data
 {
     public class RepositoryInstaller : IWindsorInstaller
     {
+        private const string ApplicationsPath = "steamapps";
+        private const string ApplicationConfigurationFileExtension = "acf";
+
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(Component.For<IConfigurationRepository>()
-                                        .ImplementedBy<ApplicationConfigurationRepository>());
+                                        .ImplementedBy<ConfigurationRepository>()
+                                        .DependsOn(Dependency.OnValue("configurationPath", ApplicationsPath), 
+                                                   Dependency.OnValue("configurationFileExtension", ApplicationConfigurationFileExtension)));
 
             container.Register(Component.For<IApplicationRepository>()
-                                        .ImplementedBy<InstalledApplicationRepository>());
+                                        .ImplementedBy<InstalledApplicationRepository>()
+                                        .DependsOn(Dependency.OnValue("applicationsPath", ApplicationsPath),
+                                                   Dependency.OnValue("fileExtension", ApplicationConfigurationFileExtension)));
 
             container.Register(Component.For<IUserRepository>()
                                         .ImplementedBy<UserRepository>());

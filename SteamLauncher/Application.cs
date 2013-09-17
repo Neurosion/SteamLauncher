@@ -8,14 +8,14 @@ namespace SteamLauncher.Domain
     [Serializable]
     public class Application : IApplication
     {
-        public int Id { get; private set; }
-        public string Name {get; private set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string ImagePath { get; set; }
         public ObservableCollection<string> Categories { get; private set; }
 
-        public Application(int id, string name)
+        public Application()
         {
-            this.Id = id;
-            this.Name = name;
+            Categories = new ObservableCollection<string>();
         }
     }
 }

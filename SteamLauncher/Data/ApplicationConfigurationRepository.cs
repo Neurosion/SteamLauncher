@@ -5,33 +5,35 @@ using System.IO;
 
 namespace SteamLauncher.Domain.Data
 {
-    public class ApplicationConfigurationRepository : IConfigurationRepository
+    public class ConfigurationRepository : IConfigurationRepository
     {
-        private string _applicationPath;
+        private string _configurationPath;
+        private string _configurationFileExtension;
 
-        public ApplicationConfigurationRepository(string applicationPath)
+        public ConfigurationRepository(string configurationPath, string configurationFileExtension)
         {
-            if (!Directory.Exists(applicationPath))
-                throw new ArgumentException(string.Format("The path {0} does not exist.", applicationPath));
+            if (!Directory.Exists(configurationPath))
+                throw new ArgumentException(string.Format("The path {0} does not exist.", configurationPath));
 
-            _applicationPath = applicationPath;
+            _configurationPath = configurationPath;
+            _configurationFileExtension = configurationFileExtension;
         }
 
         public IConfigurationElement Get(string id)
         {
-            var foundConfig = GetFilteredConfigurations(string.Format("*{0}.acf", id)).FirstOrDefault();
+            var foundConfig = GetFilteredConfigurations(string.Format("*{0}.{1}", id, _configurationFileExtension)).FirstOrDefault();
             return foundConfig;
         }
 
         public IEnumerable<IConfigurationElement> Get()
         {
-            var foundConfigurations = GetFilteredConfigurations("*.acf");
+            var foundConfigurations = GetFilteredConfigurations(string.Format("*.{0}", _configurationFileExtension));
             return foundConfigurations;
         }
 
         private IEnumerable<IConfigurationElement> GetFilteredConfigurations(string filter)
         {
-            foreach (var currentFile in Directory.GetFiles(_applicationPath, filter))
+            foreach (var currentFile in Directory.GetFiles(_configurationPath, filter))
                 yield return LoadConfig(currentFile);
         }
 
