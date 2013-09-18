@@ -7,9 +7,9 @@ using NUnit.Framework;
 namespace SteamLauncher.Domain.Tests.Data
 {
     [TestFixture]
-    public class TextFileResourceLocatorTests
+    public class ConfigurationResourceWatcherTests
     {
-        [Test]
+        [Test, Ignore]
         public void NeedTests()
         {
             throw new NotImplementedException();

@@ -10,12 +10,12 @@ namespace SteamLauncher.Domain.Data
     {
         protected IConfigurationResourceLocator ConfigurationLocator { get; private set; }
         protected Dictionary<string, IConfigurationElement> CachedElements { get; private set; }
-        private IConfigurationReader _configurationReader;
+        protected IConfigurationReader ConfigurationReader { get; private set; }
 
         public ConfigurationRepository(IConfigurationResourceLocator configurationLocator)
         {
-            this.ConfigurationLocator = configurationLocator;
             CachedElements = new Dictionary<string, IConfigurationElement>();
+            this.ConfigurationLocator = configurationLocator;
         }
 
         public IConfigurationElement Get(string id)

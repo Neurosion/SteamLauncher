@@ -7,12 +7,12 @@ using NUnit.Framework;
 namespace SteamLauncher.Domain.Tests.Data
 {
     [TestFixture]
-    public class InstalledApplicationRepositoryTests
+    public class WatchingConfigurationRepositoryTests
     {
         [Test, Ignore]
         public void NeedTests()
         {
-            throw new NotImplementedException();
+
         }
     }
 }
