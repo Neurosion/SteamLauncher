@@ -23,9 +23,14 @@ namespace SteamLauncher.Domain.Data
                 throw new ArgumentException(string.Format("The path {0} does not exist.", path ?? string.Empty));
 
             _path = path;
-            _filter = filter;
+            _filter = !string.IsNullOrEmpty(filter)
+                        ? filter
+                        : "*.*";
 
-            _watcher = new FileSystemWatcher(_path, _filter ?? "*");
+            _watcher = new FileSystemWatcher(_path, _filter)
+                {
+                    EnableRaisingEvents = true
+                };
             _watcher.Created += (s, e) => ResourceAdded(GetIdFromPath(e.FullPath), e.FullPath);
             _watcher.Deleted += (s, e) => ResourceRemoved(GetIdFromPath(e.FullPath), e.FullPath);
             _watcher.Changed += (s, e) => ResourceUpdated(GetIdFromPath(e.FullPath), e.FullPath);

@@ -31,66 +31,83 @@ namespace SteamLauncher.Domain.Tests.Data
 
         [TestCase(null)]
         [TestCase("")]
-        [TestCase("a")]
-        [TestCase("b")]
-        public void NotifiesWhenFileWithProvidedExtensionIsCreated(string extension)
+        [TestCase("*.a")]
+        [TestCase("*.b")]
+        public void NotifiesWhenFileWithProvidedFilterIsCreated(string filter)
         {
-            PerformNotificationTestSetupAndCleanup(extension,
-                (fileNames, watcher, notifiedFileNames) =>
+            PerformNotificationTestSetupAndCleanup(filter,
+                (fileNames, watcher) =>
                 {
-                    watcher.ResourceAdded += (id, name) => notifiedFileNames.Add(name);
+                    var notifiedFileNames = new List<string>();
+                    
+                    watcher.ResourceAdded += (id, name) => notifiedFileNames.Add(Path.GetFileName(name));
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
+
+                    System.Threading.Thread.Sleep(30);
+
+                    return notifiedFileNames;
                 });
         }
 
         [TestCase(null)]
         [TestCase("")]
-        [TestCase("a")]
-        [TestCase("b")]
-        public void NotifiesWhenFileWithProvidedExtensionIsDeleted(string extension)
+        [TestCase("*.a")]
+        [TestCase("*.b")]
+        public void NotifiesWhenFileWithProvidedFilterIsDeleted(string filter)
         {
-            PerformNotificationTestSetupAndCleanup(extension,
-                (fileNames, watcher, notifiedFileNames) =>
+            PerformNotificationTestSetupAndCleanup(filter,
+                (fileNames, watcher) =>
                 {
-                    watcher.ResourceRemoved += (id, name) => notifiedFileNames.Add(name);
+                    var notifiedFileNames = new List<string>();
+                    
+                    watcher.ResourceRemoved += (id, name) => notifiedFileNames.Add(Path.GetFileName(name));
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
                     fileNames.ForEach(x => File.Delete(x));
+
+                    System.Threading.Thread.Sleep(30);
+
+                    return notifiedFileNames;
                 });
         }
 
         [TestCase(null)]
         [TestCase("")]
-        [TestCase("a")]
-        [TestCase("b")]
-        public void NotifiesWhenFileWithProvidedExtensionIsUpdated(string extension)
+        [TestCase("*.a")]
+        [TestCase("*.b")]
+        public void NotifiesWhenFileWithProvidedFilterIsUpdated(string filter)
         {
-            PerformNotificationTestSetupAndCleanup(extension,
-                (fileNames, watcher, notifiedFileNames) =>
+            PerformNotificationTestSetupAndCleanup(filter,
+                (fileNames, watcher) =>
                 {
-                    watcher.ResourceUpdated += (id, name) => notifiedFileNames.Add(name);
+                    var notifiedFileNames = new List<string>();
+
+                    watcher.ResourceUpdated += (id, name) => notifiedFileNames.Add(Path.GetFileName(name));
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
+
+                    System.Threading.Thread.Sleep(30);
+
+                    return notifiedFileNames;
                 });
         }
 
-        private void PerformNotificationTestSetupAndCleanup(string extension, Action<IEnumerable<string>, ConfigurationResourceWatcher, List<string>> testBody)
+        private void PerformNotificationTestSetupAndCleanup(string filter, Func<IEnumerable<string>, ConfigurationResourceWatcher, List<string>> testBody)
         {
             var fileNames = new[] { "test", "test.a", "test.b", "test_2.a", "test_3", "test_4" };
 
             try
             {
-                var watcher = new ConfigurationResourceWatcher(Environment.CurrentDirectory, extension);
-                var notifiedFileNames = new List<string>();
-                var expectedFileNames = fileNames.Where(x => string.IsNullOrEmpty(extension) || x.EndsWith(extension));
+                var watcher = new ConfigurationResourceWatcher(Environment.CurrentDirectory, filter);
+                var expectedFileNames = fileNames.Where(x => string.IsNullOrEmpty(filter) || x.EndsWith(filter));
 
-                testBody(expectedFileNames, watcher, notifiedFileNames);
+                var notifiedFileNames = testBody(expectedFileNames, watcher);
 
                 Assert.AreEqual(expectedFileNames.Count(), notifiedFileNames.Count);
 
-                foreach (var currentFileName in fileNames)
+                foreach (var currentFileName in expectedFileNames)
                     Assert.Contains(currentFileName, notifiedFileNames);
             }
             catch

@@ -9,7 +9,7 @@ namespace SteamLauncher.Domain.Tests
         {
             try
             {
-                fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
+                fileNames.ForEach(x => File.WriteAllText(x, "Test File: " + x));
                 assertionMethod(fileNames);
             }
             catch

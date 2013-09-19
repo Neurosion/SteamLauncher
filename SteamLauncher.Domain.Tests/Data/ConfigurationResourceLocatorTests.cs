@@ -41,7 +41,28 @@ namespace SteamLauncher.Domain.Tests.Data
         }
 
         [Test]
-        public void EmptyExtensionReturnsResultsWithAnyExtension()
+        public void ProvidesConfigReaderWithContentsOfMatchingFiles()
+        {
+            AssertFileBasedTest(new[] { "test", "test.a", "test.b", "test.c", "test_2.b" },
+                fileNames =>
+                {
+                    var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
+                    var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
+                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
+                    var extension = "b";
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
+                    var result = locator.Locate(string.Empty);
+                    var matchedFileNames = fileNames.Where(x => x.EndsWith(extension));
+
+                    Assert.AreEqual(2, result.Count());
+
+                    foreach (var currentItem in matchedFileNames)
+                        configReaderMock.AssertWasCalled(x => x.Read(Arg<string>.Is.Equal("Test File: " + currentItem)), c => c.Repeat.Once());
+                });
+        }
+
+        [Test]
+        public void EmptyExtensionReturnsResultsWithNoExtension()
         {
             AssertFileBasedTest(new[] { "test", "test.a", "test.b", "test.c" },
                 fileNames =>
@@ -52,15 +73,12 @@ namespace SteamLauncher.Domain.Tests.Data
                     var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock);
                     var result = locator.Locate("test");
 
-                    Assert.AreEqual(fileNames.Length, result.Count());
-
-                    foreach (var currentFileName in fileNames)
-                        configReaderMock.AssertWasCalled(x => x.Read(Arg<string>.Is.Equal(currentFileName)), c => c.Repeat.Once());
+                    Assert.AreEqual(1, result.Count());
                 });
         }
 
         [Test]
-        public void EmptyLocatorValueWithEmptyExtensionReturnsEmptyResults()
+        public void EmptyLocatorValueWithEmptyExtensionReturnsAllResults()
         {
             AssertFileBasedTest(new[] { "test", "test.a", "test.b", "test.c" },
                 fileNames =>
@@ -71,12 +89,12 @@ namespace SteamLauncher.Domain.Tests.Data
                     var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock);
                     var result = locator.Locate(string.Empty);
 
-                    Assert.AreEqual(0, result.Count());
+                    Assert.AreEqual(Directory.GetFiles(Environment.CurrentDirectory, "*").Count(), result.Count());
                 });
         }
 
         [Test]
-        public void NullLocatorValueWithEmptyExtensionReturnsEmptyResults()
+        public void NullLocatorValueWithEmptyExtensionReturnsAllResults()
         {
             AssertFileBasedTest(new[] { "test", "test.a", "test.b", "test.c" },
                 fileNames =>
@@ -87,7 +105,7 @@ namespace SteamLauncher.Domain.Tests.Data
                     var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock);
                     var result = locator.Locate(null);
 
-                    Assert.AreEqual(0, result.Count());
+                    Assert.AreEqual(Directory.GetFiles(Environment.CurrentDirectory, "*").Count(), result.Count());
                 });
         }
 
@@ -102,19 +120,16 @@ namespace SteamLauncher.Domain.Tests.Data
                     configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
                     var extension = "x";
                     var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
-                    var result = locator.Locate("test");
+                    var result = locator.Locate(string.Empty);
 
                     var expectedFileNames = fileNames.Where(x => x.EndsWith(extension));
 
                     Assert.AreEqual(expectedFileNames.Count(), result.Count());
-
-                    foreach (var currentFileName in expectedFileNames)
-                        configReaderMock.AssertWasCalled(x => x.Read(Arg<string>.Is.Equal(currentFileName)), c => c.Repeat.Once());
                 });
         }
 
         [Test]
-        public void NullLocatorValueWithNonEmptyExtensionReturnsEmptyResults()
+        public void NullLocatorValueWithNonEmptyExtensionReturnsAllResultsWithThatExtension()
         {
             AssertFileBasedTest(new[] { "test", "test.a", "test.b", "test.c", "test_1.x", "test_2.x" },
                 fileNames =>
@@ -126,24 +141,7 @@ namespace SteamLauncher.Domain.Tests.Data
                     var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
                     var result = locator.Locate(null);
 
-                    Assert.AreEqual(0, result.Count());
-                });
-        }
-
-        [Test]
-        public void EmptyLocatorValueWithNonEmptyExtensionReturnsEmptyResults()
-        {
-            AssertFileBasedTest(new[] { "test", "test.a", "test.b", "test.c", "test_1.x", "test_2.x" },
-                fileNames =>
-                {
-                    var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
-                    var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
-                    var extension = "x";
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
-                    var result = locator.Locate(string.Empty);
-
-                    Assert.AreEqual(0, result.Count());
+                    Assert.AreEqual(Directory.GetFiles(Environment.CurrentDirectory, "*." + extension).Count(), result.Count());
                 });
         }
     }
