@@ -10,12 +10,21 @@ namespace SteamLauncher.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string ImagePath { get; set; }
-        public ObservableCollection<string> Categories { get; private set; }
+        //public string ImagePath { get; set; }
+        //public ObservableCollection<string> Categories { get; private set; }
 
-        public Application()
+        //public Application()
+        //{
+        //    Categories = new ObservableCollection<string>();
+        //}
+
+        public void Copy(IApplication target)
         {
-            Categories = new ObservableCollection<string>();
+            if (target == null)
+                throw new ArgumentNullException();
+
+            Id = target.Id;
+            Name = target.Name;
         }
     }
 }

@@ -13,5 +13,23 @@ namespace SteamLauncher.Domain
                 foreach (var currentItem in source)
                     itemHandler(currentItem);
         }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> source, IEnumerable<T> requiredItems)
+        {
+            if (source != null && requiredItems != null)
+            {
+                var doesContainAll = true;
+                requiredItems.ForEach(x => doesContainAll = doesContainAll && source.Contains(x));
+                return doesContainAll;
+            }
+
+            return false;
+        }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> source, params T[] requiredItems)
+        {
+            var doesContainAll = ContainsAll<T>(source, (IEnumerable<T>)requiredItems);
+            return doesContainAll;
+        }
     }
 }

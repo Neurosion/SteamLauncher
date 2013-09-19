@@ -5,10 +5,9 @@ using System.Text;
 
 namespace SteamLauncher.Domain
 {
-    public interface IUser
+    public interface IUser : IIdentifiable<int>, ICopyable<IUser>
     {
-        int Id { get; }
-        string Name { get; }
-        bool IsLoggedIn { get; }
+        string Name { get; set; }
+        bool IsLoggedIn { get; set; }
     }
 }

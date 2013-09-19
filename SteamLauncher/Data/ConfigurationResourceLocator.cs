@@ -15,7 +15,7 @@ namespace SteamLauncher.Domain.Data
         public ConfigurationResourceLocator(string directory, string fileExtension, IConfigurationReader configurationReader)
         {
             if (!Directory.Exists(directory))
-                throw new ArgumentException(string.Format("The path {0} does not exist.", directory));
+                throw new ArgumentException(string.Format("The path {0} does not exist.", directory ?? string.Empty));
 
             _directory = directory;
             _fileExtension = !string.IsNullOrEmpty(fileExtension)

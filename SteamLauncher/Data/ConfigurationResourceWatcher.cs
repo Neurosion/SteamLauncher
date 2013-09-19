@@ -5,9 +5,9 @@ using System.IO;
 
 namespace SteamLauncher.Domain.Data
 {
-    public class ConfigurationResourceWatcher : ResourceWatcherBase<int>, IConfigurationResourceWatcher
+    public class ConfigurationResourceWatcher : ResourceWatcher<int>, IConfigurationResourceWatcher
     {
-        public ConfigurationResourceWatcher(string path, string filter)
+        public ConfigurationResourceWatcher(string path, string filter = null)
             : base(path, filter)
         {
         }

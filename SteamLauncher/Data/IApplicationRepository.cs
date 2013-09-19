@@ -2,7 +2,7 @@
 {
     public interface IApplicationRepository : IRepository<IApplication, int>
     {
-        void Save(IApplication item);
-        void Delete(IApplication item);
+        //void Save(IApplication item);
+        //void Delete(IApplication item);
     }
 }

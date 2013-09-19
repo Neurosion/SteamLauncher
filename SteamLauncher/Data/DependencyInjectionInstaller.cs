@@ -24,7 +24,7 @@ namespace SteamLauncher.Domain.Data
                                         .ImplementedBy<ConfigurationResourceWatcher>()
                                         .DependsOn(Dependency.OnValue("path", ApplicationsPath),
                                                    Dependency.OnValue("filter", ApplicationConfigurationFileFilter))
-                                         .Named("ApplicationConfigurationResourceWatcher"));
+                                        .Named("ApplicationConfigurationResourceWatcher"));
 
             container.Register(Component.For<IWatchingConfigurationRepository>()
                                         .ImplementedBy<WatchingConfigurationRepository>()

@@ -58,7 +58,7 @@
     <Compile Include="Data\ConfigurationResourceWatcher.cs" />
     <Compile Include="Data\IConfigurationResourceWatcher.cs" />
     <Compile Include="Data\IWatchingConfigurationRepository.cs" />
-    <Compile Include="Data\ResourceWatcherBase.cs" />
+    <Compile Include="Data\ResourceWatcher.cs" />
     <Compile Include="Data\IConfigurationRepository.cs" />
     <Compile Include="Data\IConfigurationResourceLocator.cs" />
     <Compile Include="Data\IResourceLocator.cs" />
@@ -70,9 +70,12 @@
     <Compile Include="Data\IUserRepository.cs" />
     <Compile Include="Data\InstalledApplicationRepository.cs" />
     <Compile Include="Data\UserRepository.cs" />
+    <Compile Include="Data\WatchedConfigurationBasedElementRepository.cs" />
     <Compile Include="Data\WatchingConfigurationRepository.cs" />
     <Compile Include="DomainInstaller.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="ICopyable.cs" />
+    <Compile Include="IIdentifiable.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="IApplication.cs" />

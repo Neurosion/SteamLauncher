@@ -1,0 +1,12 @@
+Steam Quicklaunch
+Make steam quick launch:
+	Show games, allow multiple categories
+	Allow launching by double clicking game
+	Allow pressing global hot key (Win+G, or custom) to show a search box
+		narrows list of games as you type
+		press enter once game is selected to launch
+			closes search area once launched
+	Load style settings (back/foreground colors, font, etc.) from current user’s settings
+	Load game list from current user’s games
+	Load current user
+		if no better way, compare timestamps on Steam\userdata\<userid>\config\localconfig.vdf and assume user with the latest stamp is the current user
