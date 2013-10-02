@@ -10,7 +10,6 @@ namespace SteamLauncher.Domain.Data
     {
         protected IConfigurationResourceLocator ConfigurationLocator { get; private set; }
         protected Dictionary<string, IConfigurationElement> CachedElements { get; private set; }
-        protected IConfigurationReader ConfigurationReader { get; private set; }
 
         public ConfigurationRepository(IConfigurationResourceLocator configurationLocator)
         {
@@ -34,6 +33,15 @@ namespace SteamLauncher.Domain.Data
 
         private IEnumerable<IConfigurationElement> GetFilteredConfigurations(string id = null)
         {
+            var filter = id ?? "*";
+
+            var locatedConfigurations = ConfigurationLocator.Locate(filter);
+
+            foreach (var currentConfiguration in locatedConfigurations)
+            {
+                if (!CachedElements.ContainsKey(currentConfiguration.
+            }
+
             var locatedConfigurations = ConfigurationLocator.Locate(id ?? "*") ?? new IConfigurationElement[] { };
             return locatedConfigurations;
         }

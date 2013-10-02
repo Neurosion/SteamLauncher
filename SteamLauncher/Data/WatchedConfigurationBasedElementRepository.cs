@@ -59,13 +59,14 @@ namespace SteamLauncher.Domain.Data
             Items.RemoveAll(x => AreIdsEqual(x, item));
         }
 
-        protected void UpdateItem(IConfigurationElement configuration)
+        protected void UpdateItem(IConfigurationElement oldConfiguration, IConfigurationElement newConfiguration)
         {
-            var item = Load(configuration);
+            var oldItem = Load(oldConfiguration);
+            var newItem = Load(newConfiguration);
 
-            if (item != null)
-                foreach (var currentItem in Items.Where(x => AreIdsEqual(x, item)))
-                    currentItem.Copy(item);
+            if (oldItem != null)
+                foreach (var currentItem in Items.Where(x => AreIdsEqual(x, oldItem)))
+                    currentItem.Copy(newItem);
         }
 
         protected abstract ItemType Load(IConfigurationElement configuration);

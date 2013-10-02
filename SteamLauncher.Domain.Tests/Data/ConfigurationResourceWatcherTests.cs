@@ -44,7 +44,7 @@ namespace SteamLauncher.Domain.Tests.Data
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
 
-                    System.Threading.Thread.Sleep(30);
+                    System.Threading.Thread.Sleep(50);
 
                     return notifiedFileNames;
                 });
@@ -66,7 +66,7 @@ namespace SteamLauncher.Domain.Tests.Data
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
                     fileNames.ForEach(x => File.Delete(x));
 
-                    System.Threading.Thread.Sleep(30);
+                    System.Threading.Thread.Sleep(50);
 
                     return notifiedFileNames;
                 });
@@ -88,7 +88,7 @@ namespace SteamLauncher.Domain.Tests.Data
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
 
-                    System.Threading.Thread.Sleep(30);
+                    System.Threading.Thread.Sleep(50);
 
                     return notifiedFileNames;
                 });

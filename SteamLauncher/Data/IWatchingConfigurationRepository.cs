@@ -10,6 +10,6 @@ namespace SteamLauncher.Domain.Data
     {
         event Action<IConfigurationElement> Added;
         event Action<IConfigurationElement> Removed;
-        event Action<IConfigurationElement> Updated;
+        event Action<IConfigurationElement, IConfigurationElement> Updated;
     }
 }
