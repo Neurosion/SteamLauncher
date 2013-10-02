@@ -23,20 +23,20 @@ namespace SteamLauncher.Domain.Data
             ConfigurationWatcher.ResourceUpdated += UpdateConfiguration;
         }
 
-        private void AddConfiguration(int id, string location)
+        private void AddConfiguration(int id, string name)
         {
             var stringId = id.ToString();
 
             if (!CachedElements.ContainsKey(stringId))
             {
-                var configuration = ConfigurationLocator.Locate(location).FirstOrDefault();
+                var configuration = ConfigurationLocator.Locate(name).FirstOrDefault();
                 CachedElements.Add(stringId, configuration);
 
                 Added(configuration);
             }
         }
 
-        private void RemoveConfiguration(int id, string location)
+        private void RemoveConfiguration(int id, string name)
         {
             var stringId = id.ToString();
 
@@ -49,9 +49,9 @@ namespace SteamLauncher.Domain.Data
             }
         }
 
-        private void UpdateConfiguration(int id, string location)
+        private void UpdateConfiguration(int id, string name)
         {
-            var configuration = ConfigurationLocator.Locate(location).FirstOrDefault();
+            var configuration = ConfigurationLocator.Locate(name).FirstOrDefault();
             var stringId = id.ToString();
 
             if (!CachedElements.ContainsKey(stringId))

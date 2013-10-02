@@ -16,6 +16,7 @@ namespace SteamLauncher.Domain.Tests.Data
         public void GetWithProvidedIdReturnsNullWhenNoMatchingConfigurationExists()
         {
             var locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
+            locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new IConfigurationElement[] { });
             var repository = new ConfigurationRepository(locatorMock);
             var value = repository.Get("test");
 
@@ -26,6 +27,7 @@ namespace SteamLauncher.Domain.Tests.Data
         public void GetReturnsEmptyWhenNoMatchingConfigurationsExist()
         {
             var locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
+            locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new IConfigurationElement[] { });
             var repository = new ConfigurationRepository(locatorMock);
             var value = repository.Get();
 

@@ -52,6 +52,7 @@
     <Compile Include="Configuration\DependencyInjectionInstaller.cs" />
     <Compile Include="Configuration\IConfigurationElementReader.cs" />
     <Compile Include="Configuration\ConfigurationElement.cs" />
+    <Compile Include="Configuration\IRootConfigurationElement.cs" />
     <Compile Include="Data\ConfigurationRepository.cs" />
     <Compile Include="Configuration\IConfigurationElement.cs" />
     <Compile Include="Data\ConfigurationResourceLocator.cs" />

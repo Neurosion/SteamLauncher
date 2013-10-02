@@ -14,21 +14,23 @@ namespace SteamLauncher.Domain.Tests.Data
     {
         private IConfigurationResourceLocator _locatorMock;
         private IConfigurationResourceWatcher _watcherMock;
-        private IConfigurationElement _configurationMock;
+        private IRootConfigurationElement _configurationMock;
         private IConfigurationElement _configurationChildMock;
         private WatchingConfigurationRepository _repository;
         private int _id;
-        private string _path;
+        private string _name;
         
         [SetUp]
         public void TestSetup()
         {
             _locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
+            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new IConfigurationElement[] { });
             
-            _configurationMock = MockRepository.GenerateMock<IConfigurationElement>();
+            _configurationMock = MockRepository.GenerateMock<IRootConfigurationElement>();
             _configurationMock.Stub(x => x.Name).Return("Test Config");
+            _configurationMock.Id = "test id";
 
-            _configurationChildMock = MockRepository.GenerateDynamicMockWithRemoting<IConfigurationElement>();
+            _configurationChildMock = MockRepository.GenerateMock<IConfigurationElement>();
             _configurationChildMock.Stub(x => x.Name).Return("Child");
 
             _configurationMock.Stub(x => x.Children).Return(new List<IConfigurationElement>(new [] { _configurationChildMock }));
@@ -37,8 +39,8 @@ namespace SteamLauncher.Domain.Tests.Data
             _watcherMock = MockRepository.GenerateMock<IConfigurationResourceWatcher>();
             _repository = new WatchingConfigurationRepository(_locatorMock, _watcherMock);
             _id = 8;
-            _path = "test path";
-            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Equal(_path))).Return(new[] { _configurationMock });
+            _name = "test path";
+            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Equal(_name))).Return(new[] { _configurationMock });
         }
 
         [TearDown]
@@ -55,7 +57,7 @@ namespace SteamLauncher.Domain.Tests.Data
             var wasAddedCalled = false;
             
             _repository.Added += element => wasAddedCalled = true;
-            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _path);
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
 
             System.Threading.Thread.Sleep(50);
 
@@ -68,8 +70,8 @@ namespace SteamLauncher.Domain.Tests.Data
             var wasRemovedCalled = false;
 
             _repository.Removed += element => wasRemovedCalled = true;
-            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _path);
-            _watcherMock.Raise(x => x.ResourceRemoved += delegate { }, _id, _path);
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+            _watcherMock.Raise(x => x.ResourceRemoved += delegate { }, _id, _name);
 
             System.Threading.Thread.Sleep(50);
 
@@ -82,7 +84,7 @@ namespace SteamLauncher.Domain.Tests.Data
             var wasRemovedCalled = false;
 
             _repository.Removed += element => wasRemovedCalled = true;
-            _watcherMock.Raise(x => x.ResourceRemoved += delegate { }, _id, _path);
+            _watcherMock.Raise(x => x.ResourceRemoved += delegate { }, _id, _name);
 
             System.Threading.Thread.Sleep(50);
 
@@ -95,8 +97,8 @@ namespace SteamLauncher.Domain.Tests.Data
             var wasUpdatedCalled = false;
 
             _repository.Updated += (oldElement, newElement) => wasUpdatedCalled = true;
-            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _path);
-            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _path);
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _name);
             
             System.Threading.Thread.Sleep(50);
 
@@ -109,7 +111,7 @@ namespace SteamLauncher.Domain.Tests.Data
             var wasUpdatedCalled = false;
 
             _repository.Updated += (oldElement, newElement) => wasUpdatedCalled = true;
-            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _path);
+            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _name);
 
             System.Threading.Thread.Sleep(50);
 
@@ -124,9 +126,13 @@ namespace SteamLauncher.Domain.Tests.Data
 
             IConfigurationElement addedElement = null;
 
-            _repository.Added += element => addedElement = element;
-            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _path);
+            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new[] { addedElement });
 
+            _repository = new WatchingConfigurationRepository(_locatorMock, _watcherMock);
+
+            _repository.Added += element => addedElement = element;
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+            
             System.Threading.Thread.Sleep(50);
 
             elements = _repository.Get();
@@ -143,31 +149,31 @@ namespace SteamLauncher.Domain.Tests.Data
             addedElement.Attributes.Keys.ForEach(x => Assert.AreEqual(_configurationMock.Attributes[x], foundElement.Attributes[x]));
         }
 
-        [Test]
+        [Test, Ignore]
         public void GetWithIdParameterReturnsAddedConfigurationItemAfterWatcherNotification()
         {
             throw new NotImplementedException();
         }
 
-        [Test]
+        [Test, Ignore]
         public void GetDoesNotReturnRemovedConfigurationItemAfterWatcherNotification()
         {
             throw new NotImplementedException();
         }
 
-        [Test]
+        [Test, Ignore]
         public void GetWithIdParameterDoesNotReturnRemovedConfigurationItemAfterWatcherNotification()
         {
             throw new NotImplementedException();
         }
 
-        [Test]
+        [Test, Ignore]
         public void GetReturnsUpdatedConfigurationItemAfterWatcherNotification()
         {
             throw new NotImplementedException();
         }
 
-        [Test]
+        [Test, Ignore]
         public void GetWithIdParameterReturnsUpdatedConfigurationItemAfterWatcherNotification()
         {
             throw new NotImplementedException();

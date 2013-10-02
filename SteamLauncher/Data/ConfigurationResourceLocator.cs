@@ -27,7 +27,9 @@ namespace SteamLauncher.Domain.Data
 
         public IEnumerable<IConfigurationElement> Locate(string name)
         {
-            foreach (var currentFilePath in Directory.GetFiles(_directory, string.Format("{0}{1}", string.IsNullOrEmpty(name) ? "*" : name, _fileExtension)))
+            var filter = string.Format("{0}{1}", string.IsNullOrEmpty(name) ? "*" : name, _fileExtension);
+
+            foreach (var currentFilePath in Directory.GetFiles(_directory, filter))
             {
                 var fileText = File.ReadAllText(currentFilePath);
                 yield return _configurationReader.Read(fileText);

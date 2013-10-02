@@ -37,13 +37,18 @@ namespace SteamLauncher.Domain.Data
 
             var locatedConfigurations = ConfigurationLocator.Locate(filter);
 
-            foreach (var currentConfiguration in locatedConfigurations)
-            {
-                if (!CachedElements.ContainsKey(currentConfiguration.
-            }
-
-            var locatedConfigurations = ConfigurationLocator.Locate(id ?? "*") ?? new IConfigurationElement[] { };
+            locatedConfigurations.Where(x => x != null)
+                                 .ForEach(x => AddElementToCache(x));
+            
             return locatedConfigurations;
+        }
+
+        private void AddElementToCache(IConfigurationElement element)
+        {
+            var rootElement = element as IRootConfigurationElement;
+
+            if (rootElement != null && !CachedElements.ContainsKey(rootElement.Id))
+                CachedElements.Add(rootElement.Id, rootElement);
         }
     }
 }
