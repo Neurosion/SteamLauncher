@@ -23,12 +23,12 @@ namespace SteamLauncher.Domain.Tests.Data
         [SetUp]
         public void TestSetup()
         {
-            _locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
-            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new IConfigurationElement[] { });
-            
+            _id = 8;
+            _name = "Test Config";
+
             _configurationMock = MockRepository.GenerateMock<IRootConfigurationElement>();
-            _configurationMock.Stub(x => x.Name).Return("Test Config");
-            _configurationMock.Id = "test id";
+            _configurationMock.Stub(x => x.Name).Return(_name);
+            _configurationMock.Id = _id;
 
             _configurationChildMock = MockRepository.GenerateMock<IConfigurationElement>();
             _configurationChildMock.Stub(x => x.Name).Return("Child");
@@ -36,10 +36,12 @@ namespace SteamLauncher.Domain.Tests.Data
             _configurationMock.Stub(x => x.Children).Return(new List<IConfigurationElement>(new [] { _configurationChildMock }));
             _configurationMock.Stub(x => x.Attributes).Return(new Dictionary<string, string>() { { "Attribute One", "Value One" }, { "Attribute Two", "Value Two" } });
             
+            _locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
+            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.NotEqual(_name))).Return(new IConfigurationElement[] { });
+            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Equal(_name))).Return(new IConfigurationElement[] { _configurationMock });
+
             _watcherMock = MockRepository.GenerateMock<IConfigurationResourceWatcher>();
             _repository = new WatchingConfigurationRepository(_locatorMock, _watcherMock);
-            _id = 8;
-            _name = "test path";
             _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Equal(_name))).Return(new[] { _configurationMock });
         }
 
@@ -111,7 +113,7 @@ namespace SteamLauncher.Domain.Tests.Data
             var wasUpdatedCalled = false;
 
             _repository.Updated += (oldElement, newElement) => wasUpdatedCalled = true;
-            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _name);
+            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, "invalid name");
 
             System.Threading.Thread.Sleep(50);
 
@@ -126,18 +128,15 @@ namespace SteamLauncher.Domain.Tests.Data
 
             IConfigurationElement addedElement = null;
 
-            _locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new[] { addedElement });
-
-            _repository = new WatchingConfigurationRepository(_locatorMock, _watcherMock);
-
             _repository.Added += element => addedElement = element;
             _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
             
-            System.Threading.Thread.Sleep(50);
+            System.Threading.Thread.Sleep(150);
 
             elements = _repository.Get();
 
             Assert.IsNotEmpty(elements);
+            Assert.IsNotNull(addedElement);
 
             var foundElement = elements.Where(x => x.Name == addedElement.Name).FirstOrDefault();
             Assert.IsNotNull(foundElement);

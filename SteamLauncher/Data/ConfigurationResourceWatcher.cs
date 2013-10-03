@@ -5,24 +5,11 @@ using System.IO;
 
 namespace SteamLauncher.Domain.Data
 {
-    public class ConfigurationResourceWatcher : ResourceWatcher<int>, IConfigurationResourceWatcher
+    public class ConfigurationResourceWatcher : ResourceWatcher, IConfigurationResourceWatcher
     {
-        public ConfigurationResourceWatcher(string path, string filter = null)
-            : base(path, filter)
+        public ConfigurationResourceWatcher(string path, IIdConverter idConverter, string filter = null)
+            : base(path, idConverter, filter)
         {
-        }
-
-        protected override int GetIdFromPath(string filePath)
-        {
-            var bareName = Path.GetFileNameWithoutExtension(filePath);
-            var splitName = bareName.Split(new[] { '_' });
-
-            int id = 0;
-
-            if (splitName.Length == 2)
-                int.TryParse(splitName[1], out id);
-
-            return id;
         }
     }
 }

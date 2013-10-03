@@ -7,6 +7,6 @@ namespace SteamLauncher.Domain.Configuration
 {
     public interface IConfigurationReader
     {
-        IConfigurationElement Read(string configurationData);
+        IConfigurationElement Read(int id, string configurationData);
     }
 }

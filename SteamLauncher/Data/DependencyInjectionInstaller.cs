@@ -41,7 +41,7 @@ namespace SteamLauncher.Domain.Data
 
 
             container.Register(Component.For<IConfigurationReader>()
-                                        .ImplementedBy<ConfigurationReader>());
+                                        .ImplementedBy<RootConfigurationReader>());
         }
     }
 }

@@ -8,5 +8,6 @@ namespace SteamLauncher.Domain.Configuration
         string Name { get; }
         IList<IConfigurationElement> Children { get; }
         IDictionary<string, string> Attributes { get; }
+        void Copy(IConfigurationElement element);
     }
 }

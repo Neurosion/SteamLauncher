@@ -14,19 +14,19 @@ namespace SteamLauncher.Domain.Tests.Data
         [Test]
         public void ThrowsExceptionWhenNullPathIsProvided()
         {
-            Assert.Throws<ArgumentException>(() => new ConfigurationResourceWatcher(null));
+            Assert.Throws<ArgumentException>(() => new ConfigurationResourceWatcher(null, null));
         }
 
         [Test]
         public void ThrowsExceptionWhenEmptyPathIsProvided()
         {
-            Assert.Throws<ArgumentException>(() => new ConfigurationResourceWatcher(string.Empty));
+            Assert.Throws<ArgumentException>(() => new ConfigurationResourceWatcher(string.Empty, null));
         }
 
         [Test]
         public void ThrowsExceptionWhenInvalidPathIsProvided()
         {
-            Assert.Throws<ArgumentException>(() => new ConfigurationResourceWatcher(Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString())));
+            Assert.Throws<ArgumentException>(() => new ConfigurationResourceWatcher(Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString()), null));
         }
 
         [TestCase(null)]
@@ -100,7 +100,9 @@ namespace SteamLauncher.Domain.Tests.Data
 
             try
             {
-                var watcher = new ConfigurationResourceWatcher(Environment.CurrentDirectory, filter);
+                var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                var watcher = new ConfigurationResourceWatcher(Environment.CurrentDirectory, converterMock, filter);
                 var expectedFileNames = fileNames.Where(x => string.IsNullOrEmpty(filter) || x.EndsWith(filter));
 
                 var notifiedFileNames = testBody(expectedFileNames, watcher);

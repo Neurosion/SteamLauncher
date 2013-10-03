@@ -9,38 +9,38 @@ namespace SteamLauncher.Domain.Data
     public class ConfigurationRepository : IConfigurationRepository
     {
         protected IConfigurationResourceLocator ConfigurationLocator { get; private set; }
-        protected Dictionary<string, IConfigurationElement> CachedElements { get; private set; }
+        protected Dictionary<int, IConfigurationElement> CachedElements { get; private set; }
 
         public ConfigurationRepository(IConfigurationResourceLocator configurationLocator)
         {
-            CachedElements = new Dictionary<string, IConfigurationElement>();
+            CachedElements = new Dictionary<int, IConfigurationElement>();
             this.ConfigurationLocator = configurationLocator;
         }
 
-        public IConfigurationElement Get(string id)
+        public IConfigurationElement Get(int id)
         {
-            var foundConfig = CachedElements.ContainsKey(id)
-                                ? CachedElements[id]
-                                : GetFilteredConfigurations(id).FirstOrDefault();
+            IConfigurationElement foundConfig = null;
+
+            if (CachedElements.ContainsKey(id))
+                foundConfig = CachedElements[id];
+            else
+            {
+                foundConfig = ConfigurationLocator.Locate(id.ToString()).FirstOrDefault();
+                AddElementToCache(foundConfig);
+            }
+
             return foundConfig;
         }
 
         public IEnumerable<IConfigurationElement> Get()
         {
-            var foundConfigurations = GetFilteredConfigurations();
-            return foundConfigurations;
-        }
+            ConfigurationLocator.Locate("*")
+                                .Where(x => x != null)
+                                .ForEach(x => AddElementToCache(x));
 
-        private IEnumerable<IConfigurationElement> GetFilteredConfigurations(string id = null)
-        {
-            var filter = id ?? "*";
-
-            var locatedConfigurations = ConfigurationLocator.Locate(filter);
-
-            locatedConfigurations.Where(x => x != null)
-                                 .ForEach(x => AddElementToCache(x));
+            var elements = CachedElements.Values;
             
-            return locatedConfigurations;
+            return elements;
         }
 
         private void AddElementToCache(IConfigurationElement element)

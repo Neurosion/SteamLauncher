@@ -18,7 +18,7 @@ namespace SteamLauncher.Domain.Tests.Data
             var locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
             locatorMock.Stub(x => x.Locate(Arg<string>.Is.Anything)).Return(new IConfigurationElement[] { });
             var repository = new ConfigurationRepository(locatorMock);
-            var value = repository.Get("test");
+            var value = repository.Get(0);
 
             Assert.IsNull(value);
         }
@@ -37,11 +37,11 @@ namespace SteamLauncher.Domain.Tests.Data
         [Test]
         public void GetsConfigurationWhenMatchingConfigurationExists()
         {
-            var elementId = "test";
-            var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-            configElementMock.Stub(x => x.Name).Return(elementId);
+            int elementId = 0;
+            var configElementMock = MockRepository.GenerateMock<IRootConfigurationElement>();
+            configElementMock.Id = elementId;
             var locatorMock = MockRepository.GenerateMock<IConfigurationResourceLocator>();
-            locatorMock.Stub(x => x.Locate(elementId)).Return(new [] { configElementMock });
+            locatorMock.Stub(x => x.Locate(elementId.ToString())).Return(new [] { configElementMock });
             var repository = new ConfigurationRepository(locatorMock);
             var value = repository.Get(elementId);
             Assert.IsNotNull(value);

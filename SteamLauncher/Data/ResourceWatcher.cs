@@ -7,22 +7,24 @@ using SteamLauncher.Domain.Configuration;
 
 namespace SteamLauncher.Domain.Data
 {
-    public abstract class ResourceWatcher<IdType> : IResourceWatcher<IdType>
+    public abstract class ResourceWatcher : IResourceWatcher
     {
         private string _path;
         private string _filter;
         private FileSystemWatcher _watcher;
+        private IIdConverter _idConverter;
 
-        public event Action<IdType, string> ResourceAdded = delegate { };
-        public event Action<IdType, string> ResourceRemoved = delegate { };
-        public event Action<IdType, string> ResourceUpdated = delegate { };
+        public event Action<int, string> ResourceAdded = delegate { };
+        public event Action<int, string> ResourceRemoved = delegate { };
+        public event Action<int, string> ResourceUpdated = delegate { };
 
-        public ResourceWatcher(string path, string filter = null)
+        public ResourceWatcher(string path, IIdConverter idConverter, string filter = null)
         {
             if (!Directory.Exists(path))
                 throw new ArgumentException(string.Format("The path {0} does not exist.", path ?? string.Empty));
 
             _path = path;
+            _idConverter = idConverter;
             _filter = !string.IsNullOrEmpty(filter)
                         ? filter
                         : "*.*";
@@ -31,16 +33,14 @@ namespace SteamLauncher.Domain.Data
                 {
                     EnableRaisingEvents = true
                 };
-            _watcher.Created += (s, e) => ResourceAdded(GetIdFromPath(e.FullPath), e.FullPath);
-            _watcher.Deleted += (s, e) => ResourceRemoved(GetIdFromPath(e.FullPath), e.FullPath);
-            _watcher.Changed += (s, e) => ResourceUpdated(GetIdFromPath(e.FullPath), e.FullPath);
+            _watcher.Created += (s, e) => ResourceAdded(_idConverter.Convert(e.FullPath), e.FullPath);
+            _watcher.Deleted += (s, e) => ResourceRemoved(_idConverter.Convert(e.FullPath), e.FullPath);
+            _watcher.Changed += (s, e) => ResourceUpdated(_idConverter.Convert(e.FullPath), e.FullPath);
             _watcher.Renamed += (s, e) =>
                 {
-                    ResourceRemoved(GetIdFromPath(e.OldFullPath), e.OldFullPath);
-                    ResourceAdded(GetIdFromPath(e.FullPath), e.FullPath);
+                    ResourceRemoved(_idConverter.Convert(e.OldFullPath), e.OldFullPath);
+                    ResourceAdded(_idConverter.Convert(e.FullPath), e.FullPath);
                 };
         }
-
-        protected abstract IdType GetIdFromPath(string filePath);
     }
 }

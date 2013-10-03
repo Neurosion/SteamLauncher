@@ -2,10 +2,10 @@
 
 namespace SteamLauncher.Domain.Data
 {
-    public interface IResourceWatcher<IdType>
+    public interface IResourceWatcher
     {
-        event Action<IdType, string> ResourceAdded;
-        event Action<IdType, string> ResourceRemoved;
-        event Action<IdType, string> ResourceUpdated;
+        event Action<int, string> ResourceAdded;
+        event Action<int, string> ResourceRemoved;
+        event Action<int, string> ResourceUpdated;
     }
 }

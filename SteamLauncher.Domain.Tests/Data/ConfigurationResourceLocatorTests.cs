@@ -16,25 +16,25 @@ namespace SteamLauncher.Domain.Tests.Data
         [Test]
         public void ThrowsExceptionWhenNullPathIsProvided()
         {
-            Assert.Throws<ArgumentException>(() => new ConfigurationResourceLocator(null, null, null));
+            Assert.Throws<ArgumentException>(() => new ConfigurationResourceLocator(null, null, null, null));
         }
 
         [Test]
         public void ThrowsExceptionWhenEmptyPathIsProvided()
         {
-            Assert.Throws<ArgumentException>(() => new ConfigurationResourceLocator(string.Empty, null, null));
+            Assert.Throws<ArgumentException>(() => new ConfigurationResourceLocator(string.Empty, null, null, null));
         }
 
         [Test]
         public void ThrowsExceptionWhenInvalidPathIsProvided()
         {
-            Assert.Throws<ArgumentException>(() => new ConfigurationResourceLocator(Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString()), null, null));
+            Assert.Throws<ArgumentException>(() => new ConfigurationResourceLocator(Path.Combine(Environment.CurrentDirectory, Guid.NewGuid().ToString()), null, null, null));
         }
 
         [Test]
         public void ReturnsEmptyWhenNoItemCanBeLocated()
         {
-            var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, null);
+            var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, null, null);
             var result = locator.Locate("test");
 
             Assert.IsEmpty(result);
@@ -48,16 +48,18 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
                     var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
+                    configReaderMock.Stub(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Anything)).Return(configElementMock);
                     var extension = "b";
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
+                    var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                    converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock, converterMock);
                     var result = locator.Locate(string.Empty);
                     var matchedFileNames = fileNames.Where(x => x.EndsWith(extension));
 
                     Assert.AreEqual(2, result.Count());
 
                     foreach (var currentItem in matchedFileNames)
-                        configReaderMock.AssertWasCalled(x => x.Read(Arg<string>.Is.Equal("Test File: " + currentItem)), c => c.Repeat.Once());
+                        configReaderMock.AssertWasCalled(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Equal("Test File: " + currentItem)), c => c.Repeat.Once());
                 });
         }
 
@@ -69,8 +71,10 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
                     var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock);
+                    configReaderMock.Stub(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Anything)).Return(configElementMock);
+                    var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                    converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock, converterMock);
                     var result = locator.Locate("test");
 
                     Assert.AreEqual(1, result.Count());
@@ -85,8 +89,10 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
                     var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock);
+                    configReaderMock.Stub(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Anything)).Return(configElementMock);
+                    var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                    converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock, converterMock);
                     var result = locator.Locate(string.Empty);
 
                     Assert.AreEqual(Directory.GetFiles(Environment.CurrentDirectory, "*").Count(), result.Count());
@@ -101,8 +107,10 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
                     var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock);
+                    configReaderMock.Stub(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Anything)).Return(configElementMock);
+                    var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                    converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, string.Empty, configReaderMock, converterMock);
                     var result = locator.Locate(null);
 
                     Assert.AreEqual(Directory.GetFiles(Environment.CurrentDirectory, "*").Count(), result.Count());
@@ -117,9 +125,11 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
                     var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
+                    configReaderMock.Stub(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Anything)).Return(configElementMock);
                     var extension = "x";
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
+                    var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                    converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock, converterMock);
                     var result = locator.Locate(string.Empty);
 
                     var expectedFileNames = fileNames.Where(x => x.EndsWith(extension));
@@ -136,9 +146,11 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var configReaderMock = MockRepository.GenerateMock<IConfigurationReader>();
                     var configElementMock = MockRepository.GenerateMock<IConfigurationElement>();
-                    configReaderMock.Stub(x => x.Read(Arg<string>.Is.Anything)).Return(configElementMock);
+                    configReaderMock.Stub(x => x.Read(Arg<int>.Is.Anything, Arg<string>.Is.Anything)).Return(configElementMock);
                     var extension = "x";
-                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock);
+                    var converterMock = MockRepository.GenerateMock<IIdConverter>();
+                    converterMock.Stub(x => x.Convert(Arg<string>.Is.Anything)).Return(0);
+                    var locator = new ConfigurationResourceLocator(Environment.CurrentDirectory, extension, configReaderMock, converterMock);
                     var result = locator.Locate(null);
 
                     Assert.AreEqual(Directory.GetFiles(Environment.CurrentDirectory, "*." + extension).Count(), result.Count());

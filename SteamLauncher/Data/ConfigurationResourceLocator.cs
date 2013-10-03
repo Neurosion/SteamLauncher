@@ -11,8 +11,9 @@ namespace SteamLauncher.Domain.Data
         private string _directory;
         private string _fileExtension;
         private IConfigurationReader _configurationReader;
+        private IIdConverter _idConverter;
 
-        public ConfigurationResourceLocator(string directory, string fileExtension, IConfigurationReader configurationReader)
+        public ConfigurationResourceLocator(string directory, string fileExtension, IConfigurationReader configurationReader, IIdConverter idConverter)
         {
             if (!Directory.Exists(directory))
                 throw new ArgumentException(string.Format("The path {0} does not exist.", directory ?? string.Empty));
@@ -23,6 +24,7 @@ namespace SteamLauncher.Domain.Data
                                 : "";
 
             _configurationReader = configurationReader;
+            _idConverter = idConverter;
         }
 
         public IEnumerable<IConfigurationElement> Locate(string name)
@@ -32,7 +34,8 @@ namespace SteamLauncher.Domain.Data
             foreach (var currentFilePath in Directory.GetFiles(_directory, filter))
             {
                 var fileText = File.ReadAllText(currentFilePath);
-                yield return _configurationReader.Read(fileText);
+                var id = _idConverter.Convert(currentFilePath);
+                yield return _configurationReader.Read(id, fileText);
             }
         }
     }

@@ -9,7 +9,7 @@ namespace SteamLauncher.Domain.Configuration
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(Component.For<IConfigurationReader>()
-                                        .ImplementedBy<ConfigurationReader>());
+                                        .ImplementedBy<RootConfigurationReader>());
         }
     }
 }

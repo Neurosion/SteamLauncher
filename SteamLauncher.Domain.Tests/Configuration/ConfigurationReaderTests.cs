@@ -30,8 +30,8 @@ namespace SteamLauncher.Domain.Tests.Configuration
         [Test]
         public void RetrievedConfigurationHasExpectedRootElementName()
         {
-            var reader = new ConfigurationReader();
-            var value = reader.Read(TestElement);
+            var reader = new RootConfigurationReader();
+            var value = reader.Read(0, TestElement);
 
             Assert.AreEqual("RootElement", value.Name);
         }
@@ -39,8 +39,8 @@ namespace SteamLauncher.Domain.Tests.Configuration
         [Test]
         public void RetrivedConfigurationHasExpectedAttributes()
         {
-            var reader = new ConfigurationReader();
-            var value = reader.Read(TestElement);
+            var reader = new RootConfigurationReader();
+            var value = reader.Read(0, TestElement);
 
             Assert.AreEqual(3, value.Attributes.Count);
             Assert.IsTrue(value.Attributes.ContainsKey("AttributeOne"));
@@ -54,8 +54,8 @@ namespace SteamLauncher.Domain.Tests.Configuration
         [Test]
         public void RetievedConfigurationHasExpectedChildren()
         {
-            var reader = new ConfigurationReader();
-            var value = reader.Read(TestElement);
+            var reader = new RootConfigurationReader();
+            var value = reader.Read(0, TestElement);
 
             Assert.AreEqual(2, value.Children.Count);
 

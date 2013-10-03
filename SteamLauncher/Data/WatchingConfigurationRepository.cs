@@ -25,12 +25,10 @@ namespace SteamLauncher.Domain.Data
 
         private void AddConfiguration(int id, string name)
         {
-            var stringId = id.ToString();
-
-            if (!CachedElements.ContainsKey(stringId))
+            if (!CachedElements.ContainsKey(id))
             {
                 var configuration = ConfigurationLocator.Locate(name).FirstOrDefault();
-                CachedElements.Add(stringId, configuration);
+                CachedElements.Add(id, configuration);
 
                 Added(configuration);
             }
@@ -38,12 +36,10 @@ namespace SteamLauncher.Domain.Data
 
         private void RemoveConfiguration(int id, string name)
         {
-            var stringId = id.ToString();
-
-            if (CachedElements.ContainsKey(stringId))
+            if (CachedElements.ContainsKey(id))
             {
-                var config = CachedElements[stringId];
-                CachedElements.Remove(stringId);
+                var config = CachedElements[id];
+                CachedElements.Remove(id);
 
                 Removed(config);
             }
@@ -52,15 +48,14 @@ namespace SteamLauncher.Domain.Data
         private void UpdateConfiguration(int id, string name)
         {
             var configuration = ConfigurationLocator.Locate(name).FirstOrDefault();
-            var stringId = id.ToString();
 
-            if (!CachedElements.ContainsKey(stringId))
-                CachedElements.Add(stringId, null);
+            if (configuration != null && CachedElements.ContainsKey(id))
+            {
+                var oldConfiguration = CachedElements[id];
+                oldConfiguration.Copy(configuration);
 
-            var oldConfiguration = CachedElements[stringId];
-            CachedElements[stringId] = configuration;
-
-            Updated(oldConfiguration, configuration);
+                Updated(oldConfiguration, configuration);
+            }
         }
     }
 }

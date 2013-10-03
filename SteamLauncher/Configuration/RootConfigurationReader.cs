@@ -4,15 +4,16 @@ using System.Linq;
 
 namespace SteamLauncher.Domain.Configuration
 {
-    public class ConfigurationReader : IConfigurationReader
+    public class RootConfigurationReader : IConfigurationReader
     {
-        public IConfigurationElement Read(string configurationData)
+        public IConfigurationElement Read(int id, string configurationData)
         {
-            IConfigurationElement readConfiguration = Read(configurationData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+            var splitData = configurationData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            var readConfiguration = Read(id, splitData);
             return readConfiguration;
         }
 
-        protected IConfigurationElement Read(string[] configurationLines)
+        protected IConfigurationElement Read(int id, string[] configurationLines)
         {
             IConfigurationElement loadedElement = null;
 
@@ -29,7 +30,7 @@ namespace SteamLauncher.Domain.Configuration
                         // This is the beginning of a config element, build new element and push onto the stack
                         if (i < (configurationLines.Length - 1) && Clean(configurationLines[i + 1]) == "{")
                         {
-                            loadedElement = CreateElement(Clean(splitLine[0]));
+                            loadedElement = CreateElement(id, Clean(splitLine[0]));
 
                             // If there is an element currently on the stack, add the loaded element to its children
                             if (configStack.Any())
@@ -51,9 +52,14 @@ namespace SteamLauncher.Domain.Configuration
             return loadedElement;
         }
 
-        protected virtual IConfigurationElement CreateElement(string name)
+        protected virtual IConfigurationElement CreateElement(int id, string name)
         {
-            return new ConfigurationElement(name);
+            var rootElement = new RootConfigurationElement(name)
+            {
+                Id = id
+            };
+
+            return rootElement;
         }
 
         protected string Clean(string value)

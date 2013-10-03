@@ -48,11 +48,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLineSteamProxy.cs" />
-    <Compile Include="Configuration\ConfigurationReader.cs" />
+    <Compile Include="Configuration\RootConfigurationReader.cs" />
     <Compile Include="Configuration\DependencyInjectionInstaller.cs" />
     <Compile Include="Configuration\IConfigurationElementReader.cs" />
     <Compile Include="Configuration\ConfigurationElement.cs" />
     <Compile Include="Configuration\IRootConfigurationElement.cs" />
+    <Compile Include="Configuration\RootConfigurationElement.cs" />
     <Compile Include="Data\ConfigurationRepository.cs" />
     <Compile Include="Configuration\IConfigurationElement.cs" />
     <Compile Include="Data\ConfigurationResourceLocator.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="DomainInstaller.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="ICopyable.cs" />
+    <Compile Include="IIdConverter.cs" />
     <Compile Include="IIdentifiable.cs" />
     <Compile Include="Process.cs" />
     <Compile Include="Application.cs" />

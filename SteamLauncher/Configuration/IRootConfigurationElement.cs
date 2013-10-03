@@ -1,6 +1,6 @@
 ﻿namespace SteamLauncher.Domain.Configuration
 {
-    public interface IRootConfigurationElement : IConfigurationElement, IIdentifiable<string>
+    public interface IRootConfigurationElement : IConfigurationElement, IIdentifiable<int>
     {
     }
 }
