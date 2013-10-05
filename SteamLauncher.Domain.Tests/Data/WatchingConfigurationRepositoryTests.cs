@@ -148,34 +148,122 @@ namespace SteamLauncher.Domain.Tests.Data
             addedElement.Attributes.Keys.ForEach(x => Assert.AreEqual(_configurationMock.Attributes[x], foundElement.Attributes[x]));
         }
 
-        [Test, Ignore]
+        [Test]
         public void GetWithIdParameterReturnsAddedConfigurationItemAfterWatcherNotification()
         {
-            throw new NotImplementedException();
+            var element = _repository.Get(_id);
+            
+            Assert.IsNull(element);
+
+            IConfigurationElement addedElement = null;
+
+            _repository.Added += e => addedElement = e;
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+
+            System.Threading.Thread.Sleep(150);
+
+            element = _repository.Get(_id);
+
+            Assert.IsNotNull(element);
+
+            AssertAreEqual(addedElement, element);
         }
 
-        [Test, Ignore]
+        private void AssertAreEqual(IConfigurationElement expected, IConfigurationElement actual)
+        {
+            Assert.AreEqual(expected.Name, actual.Name);
+            Assert.AreEqual(expected.Attributes.Count, actual.Attributes.Count);
+            Assert.AreEqual(expected.Attributes.Keys.Count, actual.Attributes.Keys.Intersect(expected.Attributes.Keys).Count());
+
+            expected.Attributes.Keys.ForEach(x => Assert.AreEqual(expected.Attributes[x], actual.Attributes[x]));
+        }
+
+        [Test]
         public void GetDoesNotReturnRemovedConfigurationItemAfterWatcherNotification()
         {
-            throw new NotImplementedException();
+            var elements = _repository.Get();
+
+            Assert.IsEmpty(elements);
+
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+
+            System.Threading.Thread.Sleep(150);
+
+            elements = _repository.Get();
+
+            Assert.IsNotEmpty(elements);
+
+            _watcherMock.Raise(x => x.ResourceRemoved += delegate { }, _id, _name);
+
+            elements = _repository.Get();
+            Assert.IsEmpty(elements);
         }
 
-        [Test, Ignore]
+        [Test]
         public void GetWithIdParameterDoesNotReturnRemovedConfigurationItemAfterWatcherNotification()
         {
-            throw new NotImplementedException();
+            var element = _repository.Get(_id);
+
+            Assert.IsNull(element);
+
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+
+            System.Threading.Thread.Sleep(150);
+
+            element = _repository.Get(_id);
+
+            Assert.IsNotNull(element);
+
+            _watcherMock.Raise(x => x.ResourceRemoved += delegate { }, _id, _name);
+
+            element = _repository.Get(_id);
+            Assert.IsNull(element);
         }
 
-        [Test, Ignore]
+        [Test]
         public void GetReturnsUpdatedConfigurationItemAfterWatcherNotification()
         {
-            throw new NotImplementedException();
+            var elements = _repository.Get();
+
+            Assert.IsEmpty(elements);
+
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+
+            System.Threading.Thread.Sleep(150);
+
+            elements = _repository.Get();
+
+            Assert.IsNotEmpty(elements);
+
+            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _name);
+
+            var updatedElements = _repository.Get();
+            var firstElement = elements.First();
+            var firstUpdatedElement = updatedElements.First();
+
+            AssertAreEqual(firstElement, firstUpdatedElement);
         }
 
-        [Test, Ignore]
+        [Test]
         public void GetWithIdParameterReturnsUpdatedConfigurationItemAfterWatcherNotification()
         {
-            throw new NotImplementedException();
+            var element = _repository.Get(_id);
+
+            Assert.IsNull(element);
+
+            _watcherMock.Raise(x => x.ResourceAdded += delegate { }, _id, _name);
+
+            System.Threading.Thread.Sleep(150);
+
+            element = _repository.Get(_id);
+
+            Assert.IsNotNull(element);
+
+            _watcherMock.Raise(x => x.ResourceUpdated += delegate { }, _id, _name);
+
+            var updatedElement = _repository.Get(_id);
+
+            AssertAreEqual(element, updatedElement);
         }
     }
 }

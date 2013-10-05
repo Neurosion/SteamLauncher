@@ -53,6 +53,7 @@
     <Compile Include="Data\ConfigurationResourceLocatorTests.cs" />
     <Compile Include="Data\ConfigurationResourceWatcherTests.cs" />
     <Compile Include="Data\InstalledApplicationRepositoryTests.cs" />
+    <Compile Include="Data\WatchedConfigurationBasedElementRepositoryTests.cs" />
     <Compile Include="Data\UserRepository.cs" />
     <Compile Include="Data\WatchingConfigurationRepositoryTests.cs" />
     <Compile Include="FileBasedTestFixture.cs" />

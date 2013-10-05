@@ -46,9 +46,9 @@ namespace SteamLauncher.Domain.Data
         {
             IApplication loadedApplication = null;
 
-            if (configuration != null)
+            if (configuration != null && configuration.Children != null)
             {
-                var userConfig = configuration.Children.Where(x => x.Name == "UserConfig").FirstOrDefault();
+                var userConfig = configuration.Children.Where(x => x != null && x.Name == "UserConfig").FirstOrDefault();
                 
                 if (userConfig != null && 
                     userConfig.Attributes.Keys.ContainsAll("Installed", "name", "GameID") &&
