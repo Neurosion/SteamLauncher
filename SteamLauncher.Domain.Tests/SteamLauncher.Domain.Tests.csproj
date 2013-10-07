@@ -54,7 +54,7 @@
     <Compile Include="Data\ConfigurationResourceWatcherTests.cs" />
     <Compile Include="Data\InstalledApplicationRepositoryTests.cs" />
     <Compile Include="Data\WatchedConfigurationBasedElementRepositoryTests.cs" />
-    <Compile Include="Data\UserRepository.cs" />
+    <Compile Include="Data\UserRepositoryTests.cs" />
     <Compile Include="Data\WatchingConfigurationRepositoryTests.cs" />
     <Compile Include="FileBasedTestFixture.cs" />
     <Compile Include="Input\HotKeyTests.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Castle.Windsor;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
@@ -6,13 +7,18 @@ using SteamLauncher.Domain.Configuration;
 
 namespace SteamLauncher.Domain.Data
 {
-    public class DependencyInjectionInstaller : IWindsorInstaller
+    public class DataInstaller : InstallerBase
     {
-        private const string ApplicationsPath = "steamapps"; // TODO: need to get the base steam path here
+        private readonly string ApplicationsPath;
         private const string ApplicationConfigurationFileExtension = "acf";
         private const string ApplicationConfigurationFileFilter = "*." + ApplicationConfigurationFileExtension;
 
-        public void Install(IWindsorContainer container, IConfigurationStore store)
+        public DataInstaller()
+        {
+            ApplicationsPath = Path.Combine(SteamPath, "steamapps");
+        }
+
+        public override void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(Component.For<IConfigurationResourceLocator>()
                                         .ImplementedBy<ConfigurationResourceLocator>()

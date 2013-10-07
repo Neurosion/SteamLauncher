@@ -13,7 +13,7 @@ namespace SteamLauncher.Domain.Tests.Data
     public class InstalledApplicationRepositoryTests
     {
         [Test]
-        public void DoesApplicationRepositoryGenerateApplicationWithCorrectValuesFromConfiguration()
+        public void DoesRepositoryGenerateApplicationWithCorrectValuesFromConfiguration()
         {
             var watchingConfigRepoMock = MockRepository.GenerateMock<IWatchingConfigurationRepository>();
             var repository = new InstalledApplicationRepository(watchingConfigRepoMock);
