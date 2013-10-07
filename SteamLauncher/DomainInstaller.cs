@@ -15,6 +15,9 @@ namespace SteamLauncher.Domain
             container.Register(Component.For<ISteamProxy>()
                                         .ImplementedBy<CommandLineSteamProxy>()
                                         .DependsOn(Dependency.OnValue("steamPath", SteamPath)));
+
+            container.Register(Component.For<IIdConverter>()
+                                        .ImplementedBy<StringToIntIdConverter>());
         }
     }
 }

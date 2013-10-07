@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\FilteredApplicationListTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -55,6 +56,10 @@
     <ProjectReference Include="..\SteamLauncher.UI\SteamLauncher.UI.csproj">
       <Project>{90C124A6-CB51-41DD-BEBC-6356F21C9408}</Project>
       <Name>SteamLauncher.UI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SteamLauncher\SteamLauncher.Domain.csproj">
+      <Project>{247FA751-6985-4DF3-8486-56A3350BD145}</Project>
+      <Name>SteamLauncher.Domain</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

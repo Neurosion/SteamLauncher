@@ -4,16 +4,11 @@
         Title="MainWindow" Height="350" Width="200"
         WindowStyle="None" ResizeMode="NoResize" Background="Black">
     <StackPanel Orientation="Vertical">
-        <TextBox HorizontalAlignment="Stretch" />
-        <ItemsControl ItemsSource="{Binding ApplicationGroups}">
+        <TextBox HorizontalAlignment="Stretch" Text="{Binding Filter}" />
+        <ItemsControl ItemsSource="{Binding Applications}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <!-- Section header -->
-                        <StackPanel Orientation="Vertical">
-                            <!-- Section applications list -->
-                        </StackPanel>
-                    </StackPanel>
+                    <TextBlock Text="{Binding Name}" />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>

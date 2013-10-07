@@ -1,0 +1,3 @@
+Add exception handler to handle exceptions, including global exceptions.
+ConfigurationResourceLocator.Locate method should not be passed a full path name, it blows up if it gets passed one.
+Related to above, .acf is appended to file name, it is causing issues because it doubles the .acf extension.

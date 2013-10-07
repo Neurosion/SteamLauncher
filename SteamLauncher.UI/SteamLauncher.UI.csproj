@@ -17,7 +17,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -69,9 +69,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\NotifyPropertyChangedExtensions.cs" />
-    <Compile Include="ViewModels\ApplicationList.cs" />
-    <Compile Include="ViewModels\IApplicationList.cs" />
+    <Compile Include="NotifyPropertyChangedExtensions.cs" />
+    <Compile Include="UIInstaller.cs" />
+    <Compile Include="ViewModels\FilteredApplicationList.cs" />
+    <Compile Include="ViewModels\IFilteredApplicationList.cs" />
+    <Compile Include="Views\IMainWindow.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

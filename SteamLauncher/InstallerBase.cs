@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.IO;
 using Microsoft.Win32;
 using Castle.Windsor;
 using Castle.MicroKernel.Registration;
@@ -10,10 +11,12 @@ namespace SteamLauncher.Domain
     public abstract class InstallerBase : IWindsorInstaller
     {
         protected string SteamPath { get; private set; }
+        protected string SteamDirectory { get; private set; }
 
         public InstallerBase()
         {
             SteamPath = ResolveSteamPath();
+            SteamDirectory = Path.GetDirectoryName(SteamPath);
         }
 
         public abstract void Install(IWindsorContainer container, IConfigurationStore store);

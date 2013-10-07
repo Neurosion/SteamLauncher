@@ -4,7 +4,7 @@ using Castle.MicroKernel.SubSystems.Configuration;
 
 namespace SteamLauncher.Domain.Configuration
 {
-    public class DependencyInjectionInstaller : IWindsorInstaller
+    public class ConfigurationInstaller : IWindsorInstaller
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {

@@ -10,14 +10,14 @@ namespace SteamLauncher.Domain.Configuration
 {
     public class DependencyInjectionConfiguration
     {
-        private IWindsorContainer _container;
+        public IWindsorContainer Container { get; private set; }
         
         public DependencyInjectionConfiguration()
         {
             var assemblyPath = Path.GetDirectoryName(this.GetType().Assembly.CodeBase).Replace(@"file:\", "");
 
-            _container = new WindsorContainer();
-            _container.Install(FromAssembly.InDirectory(new AssemblyFilter(assemblyPath, "SteamLauncher*")));
+            Container = new WindsorContainer();
+            Container.Install(FromAssembly.InDirectory(new AssemblyFilter(assemblyPath, "SteamLauncher*")));
         }
     }
 }

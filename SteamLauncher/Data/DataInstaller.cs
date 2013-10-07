@@ -15,7 +15,7 @@ namespace SteamLauncher.Domain.Data
 
         public DataInstaller()
         {
-            ApplicationsPath = Path.Combine(SteamPath, "steamapps");
+            ApplicationsPath = Path.Combine(SteamDirectory, "steamapps");
         }
 
         public override void Install(IWindsorContainer container, IConfigurationStore store)
@@ -44,10 +44,6 @@ namespace SteamLauncher.Domain.Data
 
             container.Register(Component.For<IUserRepository>()
                                         .ImplementedBy<UserRepository>());
-
-
-            container.Register(Component.For<IConfigurationReader>()
-                                        .ImplementedBy<RootConfigurationReader>());
         }
     }
 }
