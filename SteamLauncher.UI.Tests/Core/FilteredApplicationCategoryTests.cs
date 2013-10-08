@@ -6,12 +6,12 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SteamLauncher.Domain.Data;
 using SteamLauncher.Domain;
-using SteamLauncher.UI.ViewModels;
+using SteamLauncher.UI.Core;
 
-namespace SteamLauncher.UI.Tests.ViewModels
+namespace SteamLauncher.UI.Tests.Core
 {
     [TestFixture]
-    public class FilteredApplicationListTests
+    public class FilteredApplicationCategoryTests
     {
         private IApplication GetMockApplication(string name)
         {
@@ -37,13 +37,13 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var repositoryMock = MockRepository.GenerateMock<IApplicationRepository>();
             repositoryMock.Stub(x => x.Get()).Return(mockedApplications);
             
-            var applicationList = new FilteredApplicationList(repositoryMock);
+            var applicationList = new FilteredApplicationCategory(null, repositoryMock);
 
             Assert.IsEmpty(applicationList.Filter);
 
             var actualApplications = applicationList.Applications;
 
-            Assert.AreEqual(mockedApplications.Count, actualApplications.Count);
+            Assert.AreEqual(mockedApplications.Count, actualApplications.Count());
             Assert.IsTrue(mockedApplications.Intersect(actualApplications).Count() == mockedApplications.Count);
         }
 
@@ -55,13 +55,13 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var repositoryMock = MockRepository.GenerateMock<IApplicationRepository>();
             repositoryMock.Stub(x => x.Get()).Return(mockedApplications);
 
-            var applicationList = new FilteredApplicationList(repositoryMock);
+            var applicationList = new FilteredApplicationCategory(null, repositoryMock);
 
             applicationList.Filter = "Four";
 
             var actualApplications = applicationList.Applications;
 
-            Assert.AreEqual(0, actualApplications.Count);
+            Assert.AreEqual(0, actualApplications.Count());
         }
 
         [Test]
@@ -72,13 +72,13 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var repositoryMock = MockRepository.GenerateMock<IApplicationRepository>();
             repositoryMock.Stub(x => x.Get()).Return(mockedApplications);
 
-            var applicationList = new FilteredApplicationList(repositoryMock);
+            var applicationList = new FilteredApplicationCategory(null, repositoryMock);
 
             applicationList.Filter = "One";
 
             var actualApplications = applicationList.Applications;
 
-            Assert.AreEqual(1, actualApplications.Count);
+            Assert.AreEqual(1, actualApplications.Count());
             Assert.AreEqual(mockedApplications[0].Name, actualApplications.First().Name);
         }
 
@@ -90,41 +90,16 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var repositoryMock = MockRepository.GenerateMock<IApplicationRepository>();
             repositoryMock.Stub(x => x.Get()).Return(mockedApplications);
 
-            var applicationList = new FilteredApplicationList(repositoryMock);
+            var applicationList = new FilteredApplicationCategory(null, repositoryMock);
 
             applicationList.Filter = "oo";
 
             var actualApplications = applicationList.Applications;
 
-            Assert.AreEqual(2, actualApplications.Count);
+            Assert.AreEqual(2, actualApplications.Count());
             Assert.AreEqual(1, actualApplications.Count(x => x.Name == mockedApplications[0].Name));
             Assert.AreEqual(1, actualApplications.Count(x => x.Name == mockedApplications[1].Name));
             Assert.AreEqual(0, actualApplications.Count(x => x.Name == mockedApplications[2].Name));
-        }
-
-        [Test]
-        public void NotifiesWhenFilterChanges()
-        {
-            var mockedApplications = GetMockApplicationList("One");
-
-            var repositoryMock = MockRepository.GenerateMock<IApplicationRepository>();
-            repositoryMock.Stub(x => x.Get()).Return(mockedApplications);
-
-            var applicationList = new FilteredApplicationList(repositoryMock);
-
-            var wasPropertyChangedCalled = false;
-
-            applicationList.PropertyChanged += (s, e) =>
-                {
-                    wasPropertyChangedCalled = true;
-                    Assert.AreEqual("Filter", e.PropertyName);
-                };
-
-            Assert.IsFalse(wasPropertyChangedCalled);
-
-            applicationList.Filter = "test";
-
-            Assert.IsTrue(wasPropertyChangedCalled);
         }
     }
 }

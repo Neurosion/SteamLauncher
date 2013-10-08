@@ -33,13 +33,13 @@ namespace SteamLauncher.Domain.Data
                 {
                     EnableRaisingEvents = true
                 };
-            _watcher.Created += (s, e) => ResourceAdded(_idConverter.Convert(e.FullPath), e.FullPath);
-            _watcher.Deleted += (s, e) => ResourceRemoved(_idConverter.Convert(e.FullPath), e.FullPath);
-            _watcher.Changed += (s, e) => ResourceUpdated(_idConverter.Convert(e.FullPath), e.FullPath);
+            _watcher.Created += (s, e) => ResourceAdded(_idConverter.Convert(e.FullPath), Path.GetFileName(e.FullPath));
+            _watcher.Deleted += (s, e) => ResourceRemoved(_idConverter.Convert(e.FullPath), Path.GetFileName(e.FullPath));
+            _watcher.Changed += (s, e) => ResourceUpdated(_idConverter.Convert(e.FullPath), Path.GetFileName(e.FullPath));
             _watcher.Renamed += (s, e) =>
                 {
-                    ResourceRemoved(_idConverter.Convert(e.OldFullPath), e.OldFullPath);
-                    ResourceAdded(_idConverter.Convert(e.FullPath), e.FullPath);
+                    ResourceRemoved(_idConverter.Convert(e.OldFullPath), Path.GetFileName(e.OldFullPath));
+                    ResourceAdded(_idConverter.Convert(e.FullPath), Path.GetFileName(e.FullPath));
                 };
         }
     }

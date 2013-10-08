@@ -24,7 +24,7 @@ namespace SteamLauncher.UI
                 if (containingProperty != null)
                 {
                     var eventArgs = new PropertyChangedEventArgs(containingProperty.Name);
-                    source.GetInvocationList().ForEach(x => x.DynamicInvoke(source, eventArgs));
+                    source.GetInvocationList().ForEach(x => x.DynamicInvoke(source.Target, eventArgs));
                 }
             }
         }

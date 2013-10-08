@@ -29,7 +29,10 @@ namespace SteamLauncher.Domain.Data
 
         public IEnumerable<IConfigurationElement> Locate(string name)
         {
-            var filter = string.Format("{0}{1}", string.IsNullOrEmpty(name) ? "*" : name, _fileExtension);
+            var filter = string.IsNullOrEmpty(name) ? "*" : name;
+
+            if (!filter.EndsWith(_fileExtension))
+                filter += _fileExtension;
 
             foreach (var currentFilePath in Directory.GetFiles(_directory, filter))
             {

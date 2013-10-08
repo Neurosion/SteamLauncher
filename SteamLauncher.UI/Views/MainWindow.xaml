@@ -4,11 +4,24 @@
         Title="MainWindow" Height="350" Width="200"
         WindowStyle="None" ResizeMode="NoResize" Background="Black">
     <StackPanel Orientation="Vertical">
-        <TextBox HorizontalAlignment="Stretch" Text="{Binding Filter}" />
-        <ItemsControl ItemsSource="{Binding Applications}">
+        <TextBox HorizontalAlignment="Stretch" Text="{Binding Path=Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <ItemsControl ItemsSource="{Binding ApplicationCategories}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Name}" />
+                    <StackPanel Orientation="Vertical">
+                        <!-- Section header -->
+                        <TextBlock Foreground="White" FontWeight="Bold" Background="Gray" TextAlignment="Center" HorizontalAlignment="Stretch" Text="{Binding Name}" />
+                        <StackPanel Orientation="Vertical">
+                            <!-- Section applications list -->
+                            <ItemsControl ItemsSource="{Binding Applications}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Foreground="White" Text="{Binding Name}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemsPanel>

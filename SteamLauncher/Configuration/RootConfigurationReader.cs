@@ -6,9 +6,11 @@ namespace SteamLauncher.Domain.Configuration
 {
     public class RootConfigurationReader : IConfigurationReader
     {
+        private readonly string[] CleaningStrings = new[] { "\t", "\n", "\r", "\"" };
+
         public IConfigurationElement Read(int id, string configurationData)
         {
-            var splitData = configurationData.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            var splitData = configurationData.Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
             var readConfiguration = Read(id, splitData);
             return readConfiguration;
         }
@@ -64,7 +66,8 @@ namespace SteamLauncher.Domain.Configuration
 
         protected string Clean(string value)
         {
-            var cleanedValue = value.Replace("\t", string.Empty).Replace("\"", string.Empty);
+            var cleanedValue = value;
+            CleaningStrings.ForEach(x => cleanedValue = cleanedValue.Replace(x, string.Empty));
             return cleanedValue;
         }
     }

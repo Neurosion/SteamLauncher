@@ -16,9 +16,25 @@ namespace SteamLauncher.Domain.Data
             Items = new List<ItemType>();
 
             this.ConfigurationRepository = configurationRepository;
+
+            LoadInitialItems();
+
             this.ConfigurationRepository.Added += AddItem;
             this.ConfigurationRepository.Removed += RemoveItem;
             this.ConfigurationRepository.Updated += UpdateItem;
+        }
+
+        private void LoadInitialItems()
+        {
+            var allConfigurations = ConfigurationRepository.Get();
+
+            if (allConfigurations != null)
+            {
+                var loadedItems = allConfigurations.Where(config => config != null)
+                                                   .Select(config => Load(config))
+                                                   .Where(app => app != null);
+                Items.AddRange(loadedItems);
+            }
         }
 
         public ItemType Get(IdType id)

@@ -40,7 +40,7 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var notifiedFileNames = new List<string>();
                     
-                    watcher.ResourceAdded += (id, name) => notifiedFileNames.Add(Path.GetFileName(name));
+                    watcher.ResourceAdded += (id, name) => notifiedFileNames.Add(name);
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
 
@@ -61,7 +61,7 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var notifiedFileNames = new List<string>();
                     
-                    watcher.ResourceRemoved += (id, name) => notifiedFileNames.Add(Path.GetFileName(name));
+                    watcher.ResourceRemoved += (id, name) => notifiedFileNames.Add(name);
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
                     fileNames.ForEach(x => File.Delete(x));
@@ -83,7 +83,7 @@ namespace SteamLauncher.Domain.Tests.Data
                 {
                     var notifiedFileNames = new List<string>();
 
-                    watcher.ResourceUpdated += (id, name) => notifiedFileNames.Add(Path.GetFileName(name));
+                    watcher.ResourceUpdated += (id, name) => notifiedFileNames.Add(name);
 
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));
                     fileNames.ForEach(x => File.WriteAllText(x, string.Empty));

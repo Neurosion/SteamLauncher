@@ -22,8 +22,8 @@ namespace SteamLauncher.Domain.Tests.Data
             mockUserConfig.Stub(x => x.Name).Return("UserConfig");
             var attributes = new Dictionary<string, string>()
             {
-                { "Installed", "1" },
-                { "GameID", "100" },
+                { "installed", "1" },
+                { "gameid", "100" },
                 { "name", "test" }
             };
             mockUserConfig.Stub(x => x.Attributes).Return(attributes);
@@ -34,7 +34,7 @@ namespace SteamLauncher.Domain.Tests.Data
             var application = repository.Get().FirstOrDefault();
             Assert.IsNotNull(application);
 
-            Assert.AreEqual(int.Parse(attributes["GameID"]), application.Id);
+            Assert.AreEqual(int.Parse(attributes["gameid"]), application.Id);
             Assert.AreEqual(attributes["name"], application.Name);
         }
 
@@ -60,7 +60,7 @@ namespace SteamLauncher.Domain.Tests.Data
             mockUserConfig.Stub(x => x.Name).Return("UserConfig");
             var attributes = new Dictionary<string, string>()
             {
-                { "Installed", "0" },
+                { "installed", "0" },
             };
             mockUserConfig.Stub(x => x.Attributes).Return(attributes);
             mockConfig.Stub(x => x.Children).Return(new[] { mockUserConfig });

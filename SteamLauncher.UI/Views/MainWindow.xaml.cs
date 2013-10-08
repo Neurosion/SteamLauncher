@@ -20,28 +20,10 @@ namespace SteamLauncher.UI.Views
     /// </summary>
     public partial class MainWindow : Window, IMainWindow
     {
-        public MainWindow(IFilteredApplicationList applicationList)
+        public MainWindow(IMainWindowViewModel viewModel)
         {
             InitializeComponent();
-            DataContext = applicationList;
+            DataContext = viewModel;
         }
-
-        //<ItemsControl ItemsSource="{Binding ApplicationGroups}">
-        //    <ItemsControl.ItemTemplate>
-        //        <DataTemplate>
-        //            <StackPanel Orientation="Vertical">
-        //                <!-- Section header -->
-        //                <StackPanel Orientation="Vertical">
-        //                    <!-- Section applications list -->
-        //                </StackPanel>
-        //            </StackPanel>
-        //        </DataTemplate>
-        //    </ItemsControl.ItemTemplate>
-        //    <ItemsControl.ItemsPanel>
-        //        <ItemsPanelTemplate>
-        //            <StackPanel Orientation="Vertical" />
-        //        </ItemsPanelTemplate>
-        //    </ItemsControl.ItemsPanel>
-        //</ItemsControl>
     }
 }

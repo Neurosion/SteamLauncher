@@ -69,10 +69,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\FilteredApplicationCategory.cs" />
+    <Compile Include="Core\FilteredApplicationCategoryFactory.cs" />
+    <Compile Include="Core\IFilteredApplicationCategoryFactory.cs" />
+    <Compile Include="Core\IFilteredApplicationCategory.cs" />
     <Compile Include="NotifyPropertyChangedExtensions.cs" />
     <Compile Include="UIInstaller.cs" />
-    <Compile Include="ViewModels\FilteredApplicationList.cs" />
-    <Compile Include="ViewModels\IFilteredApplicationList.cs" />
+    <Compile Include="ViewModels\IMainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\IMainWindow.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
