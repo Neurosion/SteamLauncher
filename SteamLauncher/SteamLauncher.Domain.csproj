@@ -92,7 +92,7 @@
     <Compile Include="IUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Input\WindowsHotKeyRegistrationController.cs" />
-    <Compile Include="StringToIntIdConverter.cs" />
+    <Compile Include="PathToIntIdConverter.cs" />
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>

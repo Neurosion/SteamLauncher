@@ -17,7 +17,7 @@ namespace SteamLauncher.Domain
                                         .DependsOn(Dependency.OnValue("steamPath", SteamPath)));
 
             container.Register(Component.For<IIdConverter>()
-                                        .ImplementedBy<StringToIntIdConverter>());
+                                        .ImplementedBy<PathToIntIdConverter>());
         }
     }
 }

@@ -50,15 +50,25 @@ namespace SteamLauncher.Domain.Data
             {
                 var userConfig = configuration.Children.Where(x => x != null && x.Name == "UserConfig").FirstOrDefault();
                 
-                if (userConfig != null && 
-                    userConfig.Attributes.Keys.ContainsAll(/*"installed", */"name", "gameid")/* &&
-                    userConfig.Attributes["installed"] == "1"*/)
+                if (userConfig != null)
                 {
-                    loadedApplication = new Application()
+                    var name = userConfig.Attributes
+                                         .Where(x => x.Key.Equals("name", StringComparison.OrdinalIgnoreCase))
+                                         .Select(x => x.Value)
+                                         .FirstOrDefault();
+                    var gameId = userConfig.Attributes
+                                           .Where(x => x.Key.Equals("gameid", StringComparison.OrdinalIgnoreCase))
+                                           .Select(x => x.Value)
+                                           .FirstOrDefault();
+
+                    if (name != null && gameId != null)
                     {
-                        Id = int.Parse(userConfig.Attributes["gameid"]),
-                        Name = userConfig.Attributes["name"]
-                    };
+                        loadedApplication = new Application()
+                        {
+                            Id = int.Parse(gameId),
+                            Name = name
+                        };
+                    }
                 }
             }
 

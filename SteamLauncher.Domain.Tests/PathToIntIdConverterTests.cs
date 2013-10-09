@@ -9,7 +9,7 @@ using SteamLauncher.Domain;
 namespace SteamLauncher.Domain.Tests
 {
     [TestFixture]
-    public class StringtoIntIdConverterTests
+    public class PathToIntIdConverterTests
     {
         [TestCase(null)]
         [TestCase("")]
@@ -18,7 +18,7 @@ namespace SteamLauncher.Domain.Tests
         [TestCase(" ")]
         public void ConvertsStringsWithoutNumbersToZeroId(string valueToConvert)
         {
-            var converter = new StringToIntIdConverter();
+            var converter = new PathToIntIdConverter();
             var convertedValue = converter.Convert(valueToConvert);
             
             Assert.AreEqual(0, convertedValue);
@@ -28,13 +28,14 @@ namespace SteamLauncher.Domain.Tests
         [TestCase(" 12", 12)]
         [TestCase("1", 1)]
         [TestCase(" 1", 1)]
-        [TestCase("1 2", 1)]
-        [TestCase(" 1 2", 1)]
-        [TestCase("  4,3,2,1", 4)]
-        [TestCase("word800_900", 800)]
-        public void ConvertsStringsWithNumbersToTheFirstSetOfNumbersInTheString(string valueToConvert, int expectedValue)
+        [TestCase("1 2", 2)]
+        [TestCase(" 1 2", 2)]
+        [TestCase("  1,2,3,4", 4)]
+        [TestCase("word800_900", 900)]
+        [TestCase("one1two2three", 2)]
+        public void ConvertsStringsWithNumbersToTheLastSetOfNumbersInTheString(string valueToConvert, int expectedValue)
         {
-            var converter = new StringToIntIdConverter();
+            var converter = new PathToIntIdConverter();
             var convertedValue = converter.Convert(valueToConvert);
 
             Assert.AreEqual(expectedValue, convertedValue);

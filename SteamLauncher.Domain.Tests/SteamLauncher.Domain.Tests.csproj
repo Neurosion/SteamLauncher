@@ -60,7 +60,7 @@
     <Compile Include="Input\HotKeyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Input\WindowsHotKeyRegistrationControllerTests.cs" />
-    <Compile Include="StringtoIntIdConverterTests.cs" />
+    <Compile Include="PathToIntIdConverterTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

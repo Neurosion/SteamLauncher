@@ -5,9 +5,9 @@ using System.Text.RegularExpressions;
 
 namespace SteamLauncher.Domain
 {
-    public class StringToIntIdConverter : IIdConverter
+    public class PathToIntIdConverter : IIdConverter
     {
-        private readonly string IdPattern = @"\d+";
+        private readonly string IdPattern = @"(?:.*?)(?<id>[0-9]+)(?:[^0-9]*)$";
 
         public int Convert(string source)
         {
@@ -16,9 +16,9 @@ namespace SteamLauncher.Domain
             if (source != null)
             {
                 var idMatch = Regex.Match(source, IdPattern);
-
-                if (idMatch.Success)
-                    int.TryParse(idMatch.Value, out id);
+                
+                if (idMatch.Groups["id"].Success)
+                    int.TryParse(idMatch.Groups["id"].Value, out id);
             }
             
             return id;
