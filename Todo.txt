@@ -1,6 +1,4 @@
-Need to fine tune filtering, will only match at beginning of string for each word part...may need to split filter by ' ' and match on each part, possibly in order of filter word occurance
 Add exception handler to handle exceptions, including global exceptions.
-Hook up steam proxy to launch applications in the UI.
 Hook up hot keys to toggle visibility of the application.
 Make the application hide when a steam application is launched.
 Make the filter empty when a the application is hidden.

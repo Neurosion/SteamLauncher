@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
 using SteamLauncher.UI.Core;
+using SteamLauncher.Domain;
 
 namespace SteamLauncher.UI.ViewModels
 {
@@ -10,5 +11,6 @@ namespace SteamLauncher.UI.ViewModels
     {
         IEnumerable<IFilteredApplicationCategory> ApplicationCategories { get; }
         string Filter { get; set; }
+        void Launch(IApplication application);
     }
 }

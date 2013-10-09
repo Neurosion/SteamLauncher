@@ -12,6 +12,9 @@ namespace SteamLauncher.Domain
     {
         public override void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            container.Register(Component.For<IProcessProxy>()
+                                        .ImplementedBy<Process>());
+
             container.Register(Component.For<ISteamProxy>()
                                         .ImplementedBy<CommandLineSteamProxy>()
                                         .DependsOn(Dependency.OnValue("steamPath", SteamPath)));

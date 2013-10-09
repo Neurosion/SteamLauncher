@@ -13,6 +13,7 @@ namespace SteamLauncher.UI.ViewModels
     public class MainWindowViewModel : IMainWindowViewModel
     {
         private string _filter;
+        private ISteamProxy _steamProxy;
 
         public IEnumerable<IFilteredApplicationCategory> ApplicationCategories { get; private set; }
 
@@ -32,10 +33,17 @@ namespace SteamLauncher.UI.ViewModels
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainWindowViewModel(IFilteredApplicationCategoryFactory applicationCategoryFactory)
+        public MainWindowViewModel(ISteamProxy steamProxy, IFilteredApplicationCategoryFactory applicationCategoryFactory)
         {
+            _steamProxy = steamProxy;
             ApplicationCategories = applicationCategoryFactory.Build();
             _filter = string.Empty;
+        }
+
+        public void Launch(IApplication application)
+        {
+            if (application != null)
+                _steamProxy.LaunchApp(application.Id);
         }
     }
 }

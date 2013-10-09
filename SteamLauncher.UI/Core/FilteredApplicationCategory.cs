@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
 using SteamLauncher.Domain;
 using SteamLauncher.Domain.Data;
 
@@ -57,12 +58,10 @@ namespace SteamLauncher.UI.Core
 
         private bool DoesNameMatchFilter(string name)
         {
-            var doesMatch = false;
+            var filterParts = Filter.Split(new [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var pattern = string.Format("({0})+", string.Join("|", filterParts));
 
-            var nameParts = name.Split(' ');
-
-            for (int i = 0; i < nameParts.Length && !doesMatch; i++)
-                doesMatch = nameParts[i].StartsWith(Filter, StringComparison.OrdinalIgnoreCase);
+            var doesMatch = Regex.IsMatch(name, pattern, RegexOptions.IgnoreCase | RegexOptions.IgnorePatternWhitespace);
 
             return doesMatch;
         }

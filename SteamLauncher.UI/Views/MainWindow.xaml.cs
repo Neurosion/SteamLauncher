@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SteamLauncher.UI.ViewModels;
+using SteamLauncher.Domain;
 
 namespace SteamLauncher.UI.Views
 {
@@ -20,10 +21,26 @@ namespace SteamLauncher.UI.Views
     /// </summary>
     public partial class MainWindow : Window, IMainWindow
     {
+        public IMainWindowViewModel ViewModel
+        {
+            get { return (IMainWindowViewModel)DataContext; }
+        }
+
         public MainWindow(IMainWindowViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+
+        private void ListBox_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter && !e.IsRepeat)
+                ViewModel.Launch(((ListBox)sender).SelectedItem as IApplication);
+        }
+
+        private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel.Launch(((ListBox)sender).SelectedItem as IApplication);
         }
     }
 }

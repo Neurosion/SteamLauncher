@@ -82,24 +82,26 @@ namespace SteamLauncher.UI.Tests.Core
             Assert.AreEqual(mockedApplications[0].Name, actualApplications.First().Name);
         }
 
-        [Test]
-        public void ProvidesApplicationWhenFilterMatchesNamePartially()
+        [TestCase(new[] { "One Two", "Two", "Three" }, new[] { "One Two", "Two" }, "Two")]
+        [TestCase(new[] { "OneTwo", "Three", "tootwoto" }, new[] { "OneTwo", "tootwoto" }, "Two")]
+        [TestCase(new[] { "twoo", "tw o", "invalid" }, new[] { "twoo" }, "Two")]
+        public void ProvidesApplicationWhenFilterMatchesNamePartially(string[] applicationNames, string[] expectedNames, string filter)
         {
-            var mockedApplications = GetMockApplicationList("Booth", "Tooth", "South");
+            var mockedApplications = GetMockApplicationList(applicationNames);
 
             var repositoryMock = MockRepository.GenerateMock<IApplicationRepository>();
             repositoryMock.Stub(x => x.Get()).Return(mockedApplications);
 
             var applicationList = new FilteredApplicationCategory(null, repositoryMock);
 
-            applicationList.Filter = "oo";
+            applicationList.Filter = filter;
 
             var actualApplications = applicationList.Applications;
 
-            Assert.AreEqual(2, actualApplications.Count());
-            Assert.AreEqual(1, actualApplications.Count(x => x.Name == mockedApplications[0].Name));
-            Assert.AreEqual(1, actualApplications.Count(x => x.Name == mockedApplications[1].Name));
-            Assert.AreEqual(0, actualApplications.Count(x => x.Name == mockedApplications[2].Name));
+            Assert.AreEqual(expectedNames.Length, actualApplications.Count());
+
+            foreach (var currentExpectedName in expectedNames)
+                Assert.IsTrue(actualApplications.Any(x => x.Name == currentExpectedName));
         }
     }
 }
