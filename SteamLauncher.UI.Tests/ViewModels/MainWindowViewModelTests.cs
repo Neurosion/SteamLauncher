@@ -17,7 +17,7 @@ namespace SteamLauncher.UI.Tests.ViewModels
         {
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
             factoryMock.Stub(x => x.Build()).Return(new IFilteredApplicationCategory[] { });
-            var viewModel = new MainWindowViewModel(null, factoryMock);
+            var viewModel = new MainWindowViewModel(null, factoryMock, null);
 
             var wasPropertyChangedCalled = false;
 
@@ -40,7 +40,7 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var categoryMock = MockRepository.GenerateMock<IFilteredApplicationCategory>();
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
             factoryMock.Stub(x => x.Build()).Return(new [] { categoryMock });
-            var viewModel = new MainWindowViewModel(null, factoryMock);
+            var viewModel = new MainWindowViewModel(null, factoryMock, null);
 
             categoryMock.AssertWasNotCalled(x => x.Filter);
 
@@ -55,7 +55,7 @@ namespace SteamLauncher.UI.Tests.ViewModels
         {
             var steamProxyMock = MockRepository.GenerateMock<ISteamProxy>();
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
-            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock);
+            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock, null);
 
             viewModel.Launch(null);
 
@@ -69,7 +69,7 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var applicationMock = MockRepository.GenerateMock<IApplication>();
             applicationMock.Stub(x => x.Id).Return(8);
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
-            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock);
+            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock, null);
 
             viewModel.Launch(applicationMock);
 

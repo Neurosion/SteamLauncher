@@ -7,13 +7,16 @@ using System.Text;
 using SteamLauncher.UI.Core;
 using SteamLauncher.Domain;
 using SteamLauncher.Domain.Data;
+using SteamLauncher.Domain.Input;
 
 namespace SteamLauncher.UI.ViewModels
 {
     public class MainWindowViewModel : IMainWindowViewModel
     {
         private string _filter;
+        private bool _isVisible;
         private ISteamProxy _steamProxy;
+        private IHotKey _hotKey;
 
         public IEnumerable<IFilteredApplicationCategory> ApplicationCategories { get; private set; }
 
@@ -31,12 +34,26 @@ namespace SteamLauncher.UI.ViewModels
             }
         }
 
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            private set
+            {
+                if (_isVisible != value)
+                {
+                    _isVisible = value;
+                    PropertyChanged.Notify();
+                }
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainWindowViewModel(ISteamProxy steamProxy, IFilteredApplicationCategoryFactory applicationCategoryFactory)
+        public MainWindowViewModel(ISteamProxy steamProxy, IFilteredApplicationCategoryFactory applicationCategoryFactory, IHotKey hotKey)
         {
             _steamProxy = steamProxy;
             ApplicationCategories = applicationCategoryFactory.Build();
+            _hotKey = hotKey;
             _filter = string.Empty;
         }
 

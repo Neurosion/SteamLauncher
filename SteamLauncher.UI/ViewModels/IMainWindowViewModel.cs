@@ -11,6 +11,7 @@ namespace SteamLauncher.UI.ViewModels
     {
         IEnumerable<IFilteredApplicationCategory> ApplicationCategories { get; }
         string Filter { get; set; }
+        bool IsVisible { get; }
         void Launch(IApplication application);
     }
 }

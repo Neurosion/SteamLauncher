@@ -8,12 +8,12 @@ using Castle.MicroKernel.SubSystems.Configuration;
 
 namespace SteamLauncher.Domain
 {
-    public abstract class InstallerBase : IWindsorInstaller
+    public abstract class DependencyInjectionInstallerBase : IWindsorInstaller
     {
         protected string SteamPath { get; private set; }
         protected string SteamDirectory { get; private set; }
 
-        public InstallerBase()
+        public DependencyInjectionInstallerBase()
         {
             SteamPath = ResolveSteamPath();
             SteamDirectory = Path.GetDirectoryName(SteamPath);

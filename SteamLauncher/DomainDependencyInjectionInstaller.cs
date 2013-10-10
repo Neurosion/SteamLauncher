@@ -8,12 +8,12 @@ using Castle.MicroKernel.SubSystems.Configuration;
 
 namespace SteamLauncher.Domain
 {
-    public class DomainInstaller : InstallerBase
+    public class DomainDependencyInjectionInstaller : DependencyInjectionInstallerBase
     {
         public override void Install(IWindsorContainer container, IConfigurationStore store)
         {
             container.Register(Component.For<IProcessProxy>()
-                                        .ImplementedBy<Process>());
+                                        .ImplementedBy<ProcessProxy>());
 
             container.Register(Component.For<ISteamProxy>()
                                         .ImplementedBy<CommandLineSteamProxy>()

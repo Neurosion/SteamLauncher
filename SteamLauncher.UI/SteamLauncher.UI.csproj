@@ -69,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Core\BoolToVisibilityValueConverter.cs" />
     <Compile Include="Core\FilteredApplicationCategory.cs" />
     <Compile Include="Core\FilteredApplicationCategoryFactory.cs" />
     <Compile Include="Core\IFilteredApplicationCategoryFactory.cs" />
@@ -102,6 +103,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Content Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

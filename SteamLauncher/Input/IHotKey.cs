@@ -8,7 +8,7 @@ namespace SteamLauncher.Domain.Input
         int Id { get; }
         ModifierKeys Modifiers { get; set; }
         Keys Key { get; set; }
-        IntPtr ParentWindowHandle { get; }
+        IntPtr ParentWindowHandle { get; set; }
         bool IsEnabled { get; }
         void Enable();
         void Disable();

@@ -7,13 +7,13 @@ using SteamLauncher.Domain.Configuration;
 
 namespace SteamLauncher.Domain.Data
 {
-    public class DataInstaller : InstallerBase
+    public class DataDependencyInjectionInstaller : DependencyInjectionInstallerBase
     {
         private readonly string ApplicationsPath;
         private const string ApplicationConfigurationFileExtension = "acf";
         private const string ApplicationConfigurationFileFilter = "*." + ApplicationConfigurationFileExtension;
 
-        public DataInstaller()
+        public DataDependencyInjectionInstaller()
         {
             ApplicationsPath = Path.Combine(SteamDirectory, "steamapps");
         }

@@ -14,7 +14,7 @@ namespace SteamLauncher.Domain.Input.Tests
         public void EnablingHotKeyWithoutKeySetThrowsException()
         {
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             Assert.Throws<ArgumentException>(() => hotKey.Enable());
         }
 
@@ -22,7 +22,7 @@ namespace SteamLauncher.Domain.Input.Tests
         public void DisablingIfNotEnabledSucceeds()
         {
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             Assert.DoesNotThrow(() => hotKey.Disable());
         }
 
@@ -30,7 +30,7 @@ namespace SteamLauncher.Domain.Input.Tests
         public void DisablingIfNoKeySetSucceeds()
         {
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             Assert.DoesNotThrow(() => hotKey.Disable());
         }
 
@@ -39,7 +39,7 @@ namespace SteamLauncher.Domain.Input.Tests
         {
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(0);
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
             
             Assert.IsFalse(hotKey.IsEnabled);
@@ -52,7 +52,7 @@ namespace SteamLauncher.Domain.Input.Tests
         {
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(0);
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
 
             Assert.IsFalse(hotKey.IsEnabled);
@@ -66,7 +66,7 @@ namespace SteamLauncher.Domain.Input.Tests
         public void DisablingWhileDisabledSucceeds()
         {
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey( registrationControllerMock);
             Assert.DoesNotThrow(() => hotKey.Disable());
         }
 
@@ -76,7 +76,7 @@ namespace SteamLauncher.Domain.Input.Tests
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(0);
             registrationControllerMock.Stub(x => x.Unregister(Arg<IHotKey>.Is.Anything)).Return(true);
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
 
             Assert.IsFalse(hotKey.IsEnabled);
@@ -92,7 +92,7 @@ namespace SteamLauncher.Domain.Input.Tests
             var id = 15;
             var registrationControllerMock = MockRepository.GenerateMock<IHotKeyRegistrationController>();
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(id);
-            var hotKey = new HotKey(IntPtr.Zero, registrationControllerMock);
+            var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
 
             Assert.AreNotEqual(id, hotKey.Id);
@@ -103,7 +103,7 @@ namespace SteamLauncher.Domain.Input.Tests
         [Test]
         public void ToStringOutputsKeyNameOnlyWhenModifierNoneIsSet()
         {
-            var hotKey = new HotKey(IntPtr.Zero, null);
+            var hotKey = new HotKey(null);
             hotKey.Modifiers = ModifierKeys.None;
             hotKey.Key = System.Windows.Forms.Keys.None;
             var stringValue = hotKey.ToString();
@@ -114,7 +114,7 @@ namespace SteamLauncher.Domain.Input.Tests
         [Test]
         public void ToStringOutputsModifierAndKeyNameWhenOneModifierIsSet()
         {
-            var hotKey = new HotKey(IntPtr.Zero, null);
+            var hotKey = new HotKey(null);
             hotKey.Modifiers = ModifierKeys.Control;
             hotKey.Key = System.Windows.Forms.Keys.A;
             var stringValue = hotKey.ToString();
@@ -125,7 +125,7 @@ namespace SteamLauncher.Domain.Input.Tests
         [Test]
         public void ToStringOutputsAllSetModifiersAndKeyNameWhenMultipleModifiersAreSet()
         {
-            var hotKey = new HotKey(IntPtr.Zero, null);
+            var hotKey = new HotKey(null);
             hotKey.Modifiers = ModifierKeys.Control | ModifierKeys.Shift | ModifierKeys.Windows;
             hotKey.Key = System.Windows.Forms.Keys.A;
             var stringValue = hotKey.ToString();

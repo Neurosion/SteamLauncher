@@ -2,3 +2,9 @@ Add exception handler to handle exceptions, including global exceptions.
 Hook up hot keys to toggle visibility of the application.
 Make the application hide when a steam application is launched.
 Make the filter empty when a the application is hidden.
+Applications are not loading the correct set, some are not installed, others are not showing up at all.
+
+Tests:
+	Test ViewModel launch activation under MainWindow
+	Test hot key with no parent window handle in constructor
+	Test MainWindowViewModel with hot key and parent window handle
