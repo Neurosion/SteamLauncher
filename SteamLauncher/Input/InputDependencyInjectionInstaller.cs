@@ -15,10 +15,13 @@ namespace SteamLauncher.Domain.Input
             container.Register(Component.For<IHotKeyRegistrationController>()
                                         .ImplementedBy<WindowsHotKeyRegistrationController>());
 
+            container.Register(Component.For<IHookRegistrationController>()
+                                        .ImplementedBy<WindowsHookRegistrationController>());
+
             container.Register(Component.For<IHotKey>()
                                         .ImplementedBy<HotKey>()
                                         .UsingFactoryMethod((kernel, context) => 
-                                            new HotKey(kernel.Resolve<IHotKeyRegistrationController>())
+                                            new HotKey(kernel.Resolve<IHotKeyRegistrationController>(), kernel.Resolve<IHookRegistrationController>())
                                             {
                                                 Key = (Keys)Enum.Parse(typeof(Keys), (string)Dependency.OnAppSettingsValue("HotKey.Key").Value),
                                                 Modifiers = (ModifierKeys)Enum.Parse(typeof(ModifierKeys), (string)Dependency.OnAppSettingsValue("HotKey.Modifiers").Value)

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace SteamLauncher.Domain.Input
 {
-    public interface IHookListener
+    public interface IHookRegistrationController
     {
         event Action HookTriggered;
-        IntPtr HookId { get; set; }
+        int HookId { get; set; }
     }
 }

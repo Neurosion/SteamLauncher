@@ -6,33 +6,58 @@ using System.Runtime.InteropServices;
 
 namespace SteamLauncher.Domain.Input
 {
-    public class WindowsHookListener : IHookListener
+    public class WindowsHookRegistrationController : IHookRegistrationController
     {
-        private int _hookId;
-        private IntPtr _hook;
+        private const uint WM_HOTKEY = 0x312; // Windows hot key pressed message id
 
-        [DllImport("user32", EntryPoint = "SetWindowsHookExA")]
+        [DllImport("user32.dll", EntryPoint = "SetWindowsHookExA")]
         private static extern IntPtr SetWindowsHookEx(int idHook, Delegate lpfn, IntPtr hmod, IntPtr dwThreadId);
 
-        [DllImport("user32", EntryPoint = "UnhookWindowsHookEx")]
+        [DllImport("user32.dll", EntryPoint = "UnhookWindowsHookEx")]
         private static extern int UnhookWindowsHookEx(IntPtr hHook);
+
+        [DllImport("user32.dll", EntryPoint = "CallNextHookEx")]
+        static extern int CallNextHook(IntPtr hHook, int ncode, IntPtr wParam, IntPtr lParam);
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr GetCurrentThreadId();
 
-        public event Action HookTriggered;
+        public event Action<int> HookTriggered = delegate { };
+        private delegate int MessageHandler(int code, IntPtr wparam, IntPtr lparam);
 
-        public int HookId
+        public IntPtr SetHook(int hookId)
         {
-            get { return _hookId; }
-            set
+            var hookPointer = SetWindowsHookEx(hookId, new MessageHandler(HandleMessage), IntPtr.Zero, GetCurrentThreadId());
+
+            if (hookPointer == IntPtr.Zero)
+                ThrowExceptionIfLastErrorExists();
+            
+            return hookPointer;
+        }
+
+        public void UnsetHook(IntPtr hookPointer)
+        {
+            UnhookWindowsHookEx(hookPointer);
+            ThrowExceptionIfLastErrorExists();
+        }
+
+        private void ThrowExceptionIfLastErrorExists()
+        {
+            int err = Marshal.GetLastWin32Error();
+            
+            if (err != 0)
+                throw new Exception(string.Format("Failed to set hot key.  Error code: {0}", err));
+        }
+
+        private int HandleMessage(int code, IntPtr wparam, IntPtr lparam)
+        {
+            if (code == WM_HOTKEY)
             {
-                if (_hookId != value)
-                {
-                    _hookId = value;
-                    //SetWindowsHookEx(
-                }
+                HookTriggered(wparam);
+                return 1;
             }
+
+            return CallNextHook(_hook, code, wparam, lparam);
         }
     }
 }

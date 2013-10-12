@@ -7,7 +7,6 @@ namespace SteamLauncher.Domain.Input
 {
     public class WindowsHotKeyRegistrationController : IHotKeyRegistrationController
     {
-        private const uint WM_HOTKEY = 0x312; // Windows hot key pressed message id
         private const uint ERROR_HOTKEY_ALREADY_REGISTERED = 1409; // Windows hot key already registered message id
         private const int MAXIMUM_HOTKEY_ID = 0xBFFF; // The maximum allowed hot key id
 

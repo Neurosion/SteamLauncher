@@ -10,6 +10,8 @@ namespace SteamLauncher.Domain.Input
     {
         [XmlIgnore]
         private IHotKeyRegistrationController _registrationController;
+        [XmlIgnore]
+        private IHookRegistrationController _hookListener;
         private ModifierKeys _modifiers;
         private Keys _key;
 
@@ -49,14 +51,10 @@ namespace SteamLauncher.Domain.Input
         }
 
         [XmlIgnore]
-        public IntPtr ParentWindowHandle { get; set; }
-
-        [XmlIgnore]
         public bool IsEnabled { get; private set; }
 
-        public HotKey(IHotKeyRegistrationController registrationController)
+        public HotKey(IHotKeyRegistrationController registrationController, IHookRegistrationController hookListener)
         {
-            ParentWindowHandle = IntPtr.Zero;
             _registrationController = registrationController;
             IsEnabled = false;
         }
@@ -85,9 +83,6 @@ namespace SteamLauncher.Domain.Input
         {
             if (Key == Keys.None)
                 throw new ArgumentException("A hot key must be set before it can be enabled.");
-
-            if (ParentWindowHandle == IntPtr.Zero)
-                throw new ArgumentException("A window handle must be set before the hot key can be enabled.");
 
             if (IsEnabled)
             {
