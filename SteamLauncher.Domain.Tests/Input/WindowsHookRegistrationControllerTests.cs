@@ -58,5 +58,20 @@ namespace SteamLauncher.Domain.Tests.Input
 
             listenerMock.AssertWasCalled(x => x.HookPointer = IntPtr.Zero, c => c.Repeat.Once());
         }
+
+        [Test, Ignore("Find a way to send key strokes to test the windows hooks")]
+        public void ListenerHandlerMethodIsCalledWhenHookIsTriggered()
+        {
+            var listenerMock = MockRepository.GenerateMock<IHookListener>();
+            listenerMock.Stub(x => x.HookId).Return((int)WindowsHooks.WH_KEYBOARD);
+            var controller = new WindowsHookRegistrationController();
+
+            controller.Register(listenerMock);
+
+            //var virtualKeyboard = new Microsoft.VisualBasic.Devices.Keyboard();
+            //virtualKeyboard.SendKeys("a");
+
+            listenerMock.AssertWasCalled(x => x.HandleHookMessage(System.Windows.Forms.Keys.A), c => c.Repeat.Once());
+        }
     }
 }

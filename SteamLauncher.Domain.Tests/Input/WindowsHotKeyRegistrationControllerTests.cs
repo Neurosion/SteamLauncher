@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SteamLauncher.Domain.Input;
 
-namespace SteamLauncher.Domain.Input.Tests
+namespace SteamLauncher.Domain.Tests.Input
 {
     [TestFixture]
     public class WindowsHotKeyRegistrationControllerTests
