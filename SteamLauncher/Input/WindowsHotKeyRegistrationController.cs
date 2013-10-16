@@ -11,6 +11,7 @@ namespace SteamLauncher.Domain.Input
         private const int MAXIMUM_HOTKEY_ID = 0xBFFF; // The maximum allowed hot key id
 
         private int _currentHotKeyId = 1;
+        private IHookRegistrationController _hookRegistrationController;
 
         [DllImport("user32.dll", SetLastError = true)]
         private static extern int RegisterHotKey(IntPtr hWnd, int id, uint modifiers, Keys virtualKeys);
@@ -18,26 +19,44 @@ namespace SteamLauncher.Domain.Input
         [DllImport("user32.dll", SetLastError = true)]
         private static extern int UnregisterHotKey(IntPtr hWnd, int id);
 
+        public WindowsHotKeyRegistrationController(IHookRegistrationController hookRegistrationController)
+        {
+            _hookRegistrationController = hookRegistrationController;
+        }
+
         public int Register(IHotKey hotKey)
         {
-            var assignedId = 0;
+            if (hotKey == null)
+                throw new ArgumentNullException("hotKey");
 
-            if (hotKey != null)
+            var assignedId = hotKey.Id;
+
+            if (hotKey.Key != Keys.None)
             {
-                assignedId = hotKey.Id;
+                if (assignedId == 0)
+                    assignedId = IncrementHotKeyId();
 
-                if (hotKey.Key != Keys.None)
-                {
-                    if (assignedId == 0)
-                        assignedId = IncrementHotKeyId();
+                _hookRegistrationController.Register(hotKey);
 
-                    if (RegisterHotKey(hotKey.ParentWindowHandle, assignedId, (uint)hotKey.Modifiers, Keys.None) == 0 &&
-                        Marshal.GetLastWin32Error() != ERROR_HOTKEY_ALREADY_REGISTERED)
-                        GenerateException("register", hotKey);
-                }
+                if (RegisterHotKey(hotKey.HookPointer, assignedId, (uint)hotKey.Modifiers, Keys.None) == 0 &&
+                    Marshal.GetLastWin32Error() != ERROR_HOTKEY_ALREADY_REGISTERED)
+                    GenerateException("register", hotKey);
             }
 
             return assignedId;
+        }
+
+        public bool Unregister(IHotKey hotKey)
+        {
+            if (hotKey == null)
+                throw new ArgumentNullException("hotKey");
+
+            _hookRegistrationController.Unregister(hotKey);
+
+            if (UnregisterHotKey(hotKey.HookPointer, hotKey.Id) == 0)
+                GenerateException("unregister", hotKey);
+
+            return true;
         }
 
         private int IncrementHotKeyId()
@@ -46,27 +65,24 @@ namespace SteamLauncher.Domain.Input
             return _currentHotKeyId;
         }
 
-        public bool Unregister(IHotKey hotKey)
-        {
-            var didUnregister = false;
-
-            if (hotKey != null)
-            {
-                if (UnregisterHotKey(hotKey.ParentWindowHandle, hotKey.Id) == 0)
-                    GenerateException("unregister", hotKey);
-
-                didUnregister = true;
-            }
-
-            return didUnregister;
-        }
-
         private void GenerateException(string action, IHotKey hotKey)
         {
-            throw new Exception(string.Format("An error occurred while attempting to {0} the hot key {1}.  Error code {2}.",
-                                              action,                                        
-                                              hotKey.ToString(),
-                                              Marshal.GetLastWin32Error()));
+            var errorCode = Marshal.GetLastWin32Error();
+
+            if (errorCode != 0)
+            {
+                try
+                {
+                    Marshal.ThrowExceptionForHR(Marshal.GetHRForLastWin32Error());
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(string.Format("An error occurred while attempting to {0} the hot key {1}.",
+                                              action,
+                                              hotKey.ToString()),
+                                        ex);
+                }
+            }
         }
     }
 }

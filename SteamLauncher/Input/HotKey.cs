@@ -10,8 +10,6 @@ namespace SteamLauncher.Domain.Input
     {
         [XmlIgnore]
         private IHotKeyRegistrationController _registrationController;
-        [XmlIgnore]
-        private IHookRegistrationController _hookListener;
         private ModifierKeys _modifiers;
         private Keys _key;
 
@@ -53,7 +51,16 @@ namespace SteamLauncher.Domain.Input
         [XmlIgnore]
         public bool IsEnabled { get; private set; }
 
-        public HotKey(IHotKeyRegistrationController registrationController, IHookRegistrationController hookListener)
+        [XmlIgnore]
+        public int HookId 
+        {
+            get { return (int)WindowsHooks.WH_KEYBOARD_LL; }
+        }
+
+        [XmlIgnore]
+        public IntPtr HookPointer { get; set; }
+
+        public HotKey(IHotKeyRegistrationController registrationController)
         {
             _registrationController = registrationController;
             IsEnabled = false;
@@ -69,16 +76,6 @@ namespace SteamLauncher.Domain.Input
             Enable(false);
         }
 
-        public void Disable()
-        {
-            if (IsEnabled)
-            {
-                IsEnabled = !_registrationController.Unregister(this);
-                if (!IsEnabled)
-                    Id = 0;
-            }
-        }
-        
         private void Enable(bool force)
         {
             if (Key == Keys.None)
@@ -94,6 +91,21 @@ namespace SteamLauncher.Domain.Input
 
             Id = _registrationController.Register(this);
             IsEnabled = true;
+        }
+
+        public void Disable()
+        {
+            if (IsEnabled)
+            {
+                IsEnabled = !_registrationController.Unregister(this);
+                if (!IsEnabled)
+                    Id = 0;
+            }
+        }
+
+        public void HandleHookMessage(Keys keys)
+        {
+            Enable();
         }
 
         public override string ToString()

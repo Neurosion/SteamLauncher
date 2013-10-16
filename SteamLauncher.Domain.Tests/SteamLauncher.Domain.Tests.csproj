@@ -58,6 +58,7 @@
     <Compile Include="Data\WatchingConfigurationRepositoryTests.cs" />
     <Compile Include="FileBasedTestFixture.cs" />
     <Compile Include="Input\HotKeyTests.cs" />
+    <Compile Include="Input\WindowsHookRegistrationControllerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Input\WindowsHotKeyRegistrationControllerTests.cs" />
     <Compile Include="PathToIntIdConverterTests.cs" />

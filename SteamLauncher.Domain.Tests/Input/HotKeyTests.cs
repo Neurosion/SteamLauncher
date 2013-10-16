@@ -41,7 +41,6 @@ namespace SteamLauncher.Domain.Input.Tests
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(0);
             var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
-            hotKey.ParentWindowHandle = new IntPtr(1);
             
             Assert.IsFalse(hotKey.IsEnabled);
             hotKey.Enable();
@@ -55,7 +54,6 @@ namespace SteamLauncher.Domain.Input.Tests
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(0);
             var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
-            hotKey.ParentWindowHandle = new IntPtr(1);
 
             Assert.IsFalse(hotKey.IsEnabled);
             hotKey.Enable();
@@ -80,7 +78,6 @@ namespace SteamLauncher.Domain.Input.Tests
             registrationControllerMock.Stub(x => x.Unregister(Arg<IHotKey>.Is.Anything)).Return(true);
             var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
-            hotKey.ParentWindowHandle = new IntPtr(1);
 
             Assert.IsFalse(hotKey.IsEnabled);
             hotKey.Enable();
@@ -97,7 +94,6 @@ namespace SteamLauncher.Domain.Input.Tests
             registrationControllerMock.Stub(x => x.Register(Arg<IHotKey>.Is.Anything)).Return(id);
             var hotKey = new HotKey(registrationControllerMock);
             hotKey.Key = System.Windows.Forms.Keys.A;
-            hotKey.ParentWindowHandle = new IntPtr(1);
 
             Assert.AreNotEqual(id, hotKey.Id);
             hotKey.Enable();

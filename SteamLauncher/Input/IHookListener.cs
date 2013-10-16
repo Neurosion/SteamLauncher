@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Windows.Forms;
 
 namespace SteamLauncher.Domain.Input
 {
-    public interface IHookRegistrationController
+    public interface IHookListener
     {
-        event Action HookTriggered;
-        int HookId { get; set; }
+        int HookId { get; }
+        IntPtr HookPointer { get; set; }
+        void HandleHookMessage(Keys keys);
     }
 }

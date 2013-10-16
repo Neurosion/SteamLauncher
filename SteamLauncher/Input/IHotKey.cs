@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace SteamLauncher.Domain.Input
 {
-    public interface IHotKey
+    public interface IHotKey : IHookListener
     {
         int Id { get; }
         ModifierKeys Modifiers { get; set; }

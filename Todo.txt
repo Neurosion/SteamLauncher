@@ -3,8 +3,17 @@ Hook up hot keys to toggle visibility of the application.
 Make the application hide when a steam application is launched.
 Make the filter empty when a the application is hidden.
 Applications are not loading the correct set, some are not installed, others are not showing up at all.
+Add notification icon (System.Windows.Forms.NotifyIcon)
+	Context menu: Show, Settings (configure hot key combo), Exit
+
+Notes:
+	Look out for "Module not found error" when trying to register hooks on systems that are not Windows 7 64 bit.
 
 Tests:
 	Test ViewModel launch activation under MainWindow
-	Test hot key with no parent window handle in constructor
-	Test MainWindowViewModel with hot key and parent window handle
+	Test MainWindowViewModel with hot key
+
+Future:
+	Add Origin support
+	Add Desura support
+	Add custom games support

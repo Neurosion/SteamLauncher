@@ -79,10 +79,12 @@
     <Compile Include="ICopyable.cs" />
     <Compile Include="IIdConverter.cs" />
     <Compile Include="IIdentifiable.cs" />
+    <Compile Include="Input\IHookListener.cs" />
     <Compile Include="Input\InputDependencyInjectionInstaller.cs" />
     <Compile Include="DependencyInjectionInstallerBase.cs" />
-    <Compile Include="Input\IHookListener.cs" />
-    <Compile Include="Input\WindowsHookListener.cs" />
+    <Compile Include="Input\IHookRegistrationController.cs" />
+    <Compile Include="Input\WindowsHookRegistrationController.cs" />
+    <Compile Include="Input\WindowsHooks.cs" />
     <Compile Include="ProcessProxy.cs" />
     <Compile Include="Application.cs" />
     <Compile Include="IApplication.cs" />

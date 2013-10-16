@@ -10,11 +10,11 @@ namespace SteamLauncher.Domain.Input.Tests
     public class WindowsHotKeyRegistrationControllerTests
     {
         [Test]
-        public void RegisterReturnsZeroWhenProvidedNullHotKey()
+        public void RegisterThrowsExceptionWhenProvidedNullHotKey()
         {
-            var controller = new WindowsHotKeyRegistrationController();
-            var value = controller.Register(null);
-            Assert.AreEqual(0, value);
+            var controller = new WindowsHotKeyRegistrationController(null);
+
+            Assert.Throws<ArgumentNullException>(() => controller.Register(null));
         }
 
         [Test]
@@ -24,54 +24,45 @@ namespace SteamLauncher.Domain.Input.Tests
             var hotKeyMock = MockRepository.GenerateMock<IHotKey>();
             hotKeyMock.Stub(x => x.Id).Return(hotKeyId);
             hotKeyMock.Stub(x => x.Key).Return(System.Windows.Forms.Keys.None);
-            var controller = new WindowsHotKeyRegistrationController();
+            var controller = new WindowsHotKeyRegistrationController(null);
 
             var value = controller.Register(hotKeyMock);
             Assert.AreEqual(hotKeyId, value);
         }
 
         [Test]
-        public void UnregisterReturnsFalseWhenProvidedNullHotKey()
+        public void UnregisterThrowsExceptionWhenProvidedNullHotKey()
         {
-            var controller = new WindowsHotKeyRegistrationController();
-            var value = controller.Unregister(null);
+            var controller = new WindowsHotKeyRegistrationController(null);
 
-            Assert.IsFalse(value);
+            Assert.Throws<ArgumentNullException>(() => controller.Unregister(null));
         }
 
         [Test]
         public void ProvidesNewIdWhenSuccessfullyRegisteringAHotKey()
         {
-            var form = new System.Windows.Forms.Form();
             var hotKeyMock = MockRepository.GenerateMock<IHotKey>();
             hotKeyMock.Stub(x => x.Id).Return(0);
             hotKeyMock.Stub(x => x.Key).Return(System.Windows.Forms.Keys.A);
-            hotKeyMock.Stub(x => x.ParentWindowHandle).Return(form.Handle);
 
-            var controller = new WindowsHotKeyRegistrationController();
+            var hookRegistrationControllerMock = MockRepository.GenerateMock<IHookRegistrationController>();
+            var controller = new WindowsHotKeyRegistrationController(hookRegistrationControllerMock);
             var returnedId = controller.Register(hotKeyMock);
 
             Assert.AreNotEqual(hotKeyMock.Id, returnedId);
             
-            try
-            {
-                controller.Unregister(hotKeyMock);
-            }
-            catch { }
-
-            form.Dispose();
+            controller.Unregister(hotKeyMock);
         }
 
         [Test]
         public void DoesReturnProvidedHotKeyIdHotKeyAlreadyRegistered()
         {
-            var form = new System.Windows.Forms.Form();
             var hotKeyMock = MockRepository.GenerateMock<IHotKey>();
             hotKeyMock.Stub(x => x.Id).Return(0);
             hotKeyMock.Stub(x => x.Key).Return(System.Windows.Forms.Keys.A);
-            hotKeyMock.Stub(x => x.ParentWindowHandle).Return(form.Handle);
 
-            var controller = new WindowsHotKeyRegistrationController();
+            var hookRegistrationControllerMock = MockRepository.GenerateMock<IHookRegistrationController>();
+            var controller = new WindowsHotKeyRegistrationController(hookRegistrationControllerMock);
             var firstReturnedId = controller.Register(hotKeyMock);
 
             Assert.AreNotEqual(hotKeyMock.Id, firstReturnedId);
@@ -80,30 +71,24 @@ namespace SteamLauncher.Domain.Input.Tests
             hotKeyMock = MockRepository.GenerateMock<IHotKey>();
             hotKeyMock.Stub(x => x.Id).Return(firstReturnedId);
             hotKeyMock.Stub(x => x.Key).Return(System.Windows.Forms.Keys.A);
-            hotKeyMock.Stub(x => x.ParentWindowHandle).Return(form.Handle);
             
             var secondReturnedId = controller.Register(hotKeyMock);
 
             Assert.AreEqual(firstReturnedId, secondReturnedId);
 
-            try
-            {
-                controller.Unregister(hotKeyMock);
-            }
-            catch { }
-
-            form.Dispose();
+            controller.Unregister(hotKeyMock);
         }
 
         [Test]
-        public void DoesThrowExceptionWhenUnregisteringHotKeyWithWindowsFails()
+        public void DoesThrowExceptionWhenUnregisteringHotKeyFails()
         {
             var hotKeyMock = MockRepository.GenerateMock<IHotKey>();
             hotKeyMock.Stub(x => x.Id).Return(0);
             hotKeyMock.Stub(x => x.Key).Return(System.Windows.Forms.Keys.A);
-            hotKeyMock.Stub(x => x.ParentWindowHandle).Return(new IntPtr(-1));
-
-            var controller = new WindowsHotKeyRegistrationController();
+            
+            var hookRegistrationControllerMock = MockRepository.GenerateMock<IHookRegistrationController>();
+            hookRegistrationControllerMock.Stub(x => x.Unregister(Arg<IHookListener>.Is.Anything)).Throw(new Exception());
+            var controller = new WindowsHotKeyRegistrationController(hookRegistrationControllerMock);
 
             Assert.Throws<Exception>(() => controller.Unregister(hotKeyMock));
         }

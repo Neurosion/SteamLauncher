@@ -25,18 +25,29 @@ namespace SteamLauncher.Domain.Data
             {
                 var friends = configuration.Children.Where(x => x.Name == "friends").FirstOrDefault();
 
-                if (friends != null && friends.Attributes.ContainsKey("PersonaName"))
+                if (friends != null && 
+                    friends.Attributes.Any(x => x.Key.Equals("PersonaName", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var profileName = friends.Attributes["PersonaName"];
-                    var profileDetail = friends.Children.Where(x => x.Attributes.ContainsKey("name") && x.Attributes["name"] == profileName)
-                                                        .FirstOrDefault();
+                    var profileName = friends.Attributes
+                                             .Where(x => x.Key.Equals("PersonaName", StringComparison.OrdinalIgnoreCase))
+                                             .Select(x => x.Value)
+                                             .FirstOrDefault();
+                    var profileDetail = friends.Children
+                                               .Where(c => c.Attributes
+                                                            .Any(a => a.Key.Equals("name", StringComparison.OrdinalIgnoreCase) && 
+                                                                      a.Value == profileName))
+                                               .FirstOrDefault();
 
                     if (profileDetail != null)
                     {
                         bool isLoggedIn = false;
 
-                        if (configuration.Attributes.ContainsKey("IsLoggedIn"))
-                            bool.TryParse(configuration.Attributes["IsLoggedIn"], out isLoggedIn);
+                        var isLoggedInValue = configuration.Attributes
+                                                           .Where(x => x.Key.Equals("IsLoggedIn", StringComparison.OrdinalIgnoreCase))
+                                                           .Select(x => x.Value)
+                                                           .FirstOrDefault();
+                        
+                        bool.TryParse(isLoggedInValue, out isLoggedIn);
 
                         loadedUser = new User()
                         {
