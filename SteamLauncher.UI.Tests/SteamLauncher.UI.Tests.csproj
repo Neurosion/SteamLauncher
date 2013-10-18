@@ -51,10 +51,11 @@
   <ItemGroup>
     <Compile Include="Core\BoolToVisibilityConverterTests.cs" />
     <Compile Include="Core\RelayCommandTests.cs" />
+    <Compile Include="Models\ApplicationModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\FilteredApplicationCategoryTests.cs" />
-    <Compile Include="ViewModels\MainWindowViewModelTests.cs" />
-    <Compile Include="Views\MainWindowTests.cs" />
+    <Compile Include="ViewModels\MainViewModelTests.cs" />
+    <Compile Include="ViewModels\SettingsViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -36,7 +36,8 @@ namespace SteamLauncher.Domain.Tests.Input
 
             try
             {
-                listenerMock.AssertWasCalled(x => x.HookPointer = Arg<IntPtr>.Is.Anything, c => c.Repeat.Once());
+                listenerMock.AssertWasCalled(x => x.HookPointer = Arg<IntPtr>.Is.Anything, 
+                                             c => c.Repeat.Once());
             }
             catch 
             { 
@@ -56,7 +57,8 @@ namespace SteamLauncher.Domain.Tests.Input
             
             controller.Unregister(listenerMock);
 
-            listenerMock.AssertWasCalled(x => x.HookPointer = IntPtr.Zero, c => c.Repeat.Once());
+            listenerMock.AssertWasCalled(x => x.HookPointer = IntPtr.Zero, 
+                                         c => c.Repeat.Once());
         }
 
         [Test, Ignore("Find a way to send key strokes to test the windows hooks")]
@@ -71,7 +73,8 @@ namespace SteamLauncher.Domain.Tests.Input
             //var virtualKeyboard = new Microsoft.VisualBasic.Devices.Keyboard();
             //virtualKeyboard.SendKeys("a");
 
-            listenerMock.AssertWasCalled(x => x.HandleHookMessage(System.Windows.Forms.Keys.A), c => c.Repeat.Once());
+            listenerMock.AssertWasCalled(x => x.HandleHookMessage(System.Windows.Forms.Keys.A), 
+                                         c => c.Repeat.Once());
         }
     }
 }

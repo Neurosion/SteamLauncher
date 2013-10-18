@@ -11,5 +11,6 @@ namespace SteamLauncher.Domain.Input
         bool IsEnabled { get; }
         void Enable();
         void Disable();
+        void Parse(string value);
     }
 }

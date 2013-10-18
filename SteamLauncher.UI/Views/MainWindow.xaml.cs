@@ -20,17 +20,23 @@ namespace SteamLauncher.UI.Views
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IMainWindow
+    public partial class MainWindow : Window, IMainView
     {
-        public IMainWindowViewModel ViewModel
+        public IMainViewModel ViewModel
         {
-            get { return (IMainWindowViewModel)DataContext; }
+            get { return (IMainViewModel)DataContext; }
         }
         
-        public MainWindow(IMainWindowViewModel viewModel)
+        public MainWindow(IMainViewModel viewModel)
         {
             InitializeComponent();
             DataContext = viewModel;
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            ViewModel.Close();
         }
 
         private void ListBox_KeyUp(object sender, KeyEventArgs e)

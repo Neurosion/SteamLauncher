@@ -76,6 +76,7 @@
     <Compile Include="Data\WatchingConfigurationRepository.cs" />
     <Compile Include="DomainDependencyInjectionInstaller.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="EnumExtensions.cs" />
     <Compile Include="ICopyable.cs" />
     <Compile Include="IIdConverter.cs" />
     <Compile Include="IIdentifiable.cs" />

@@ -7,11 +7,10 @@ using SteamLauncher.Domain;
 
 namespace SteamLauncher.UI.ViewModels
 {
-    public interface IMainWindowViewModel : INotifyPropertyChanged
+    public interface IMainViewModel : IViewModel
     {
         IEnumerable<IFilteredApplicationCategory> ApplicationCategories { get; }
         string Filter { get; set; }
-        bool IsVisible { get; }
         void Launch(IApplication application);
     }
 }

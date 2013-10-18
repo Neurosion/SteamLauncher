@@ -44,6 +44,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,6 +63,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\IViewModel.cs" />
+    <Compile Include="Views\SettingsWindow.xaml.cs">
+      <DependentUpon>SettingsWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -74,16 +80,29 @@
     <Compile Include="Core\FilteredApplicationCategoryFactory.cs" />
     <Compile Include="Core\IFilteredApplicationCategoryFactory.cs" />
     <Compile Include="Core\IFilteredApplicationCategory.cs" />
+    <Compile Include="Core\INotifyIcon.cs" />
+    <Compile Include="Core\NotifyIconWrapper.cs" />
+    <Compile Include="Core\NotifyIconActions.cs" />
     <Compile Include="Core\RelayCommand.cs" />
+    <Compile Include="Models\ApplicationModel.cs" />
+    <Compile Include="Models\IApplicationModel.cs" />
     <Compile Include="NotifyPropertyChangedExtensions.cs" />
-    <Compile Include="UIInstaller.cs" />
-    <Compile Include="ViewModels\IMainWindowViewModel.cs" />
+    <Compile Include="UIDependencyInjectionInstaller.cs" />
+    <Compile Include="ViewModels\IMainViewModel.cs" />
+    <Compile Include="ViewModels\ISettingsViewModel.cs" />
+    <Compile Include="ViewModels\IView.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="Views\IMainWindow.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Views\ISettingsView.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\SettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -99,6 +118,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Resources\NotificationIcon.ico" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

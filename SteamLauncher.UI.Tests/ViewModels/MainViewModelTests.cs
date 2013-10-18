@@ -10,14 +10,15 @@ using SteamLauncher.Domain;
 
 namespace SteamLauncher.UI.Tests.ViewModels
 {
-    public class MainWindowViewModelTests
+    public class MainViewModelTests
     {
         [Test]
         public void NotifiesPropertyChangedWhenFilterChanges()
         {
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
             factoryMock.Stub(x => x.Build()).Return(new IFilteredApplicationCategory[] { });
-            var viewModel = new MainWindowViewModel(null, factoryMock, null);
+            var notifyIconMock = MockRepository.GenerateMock<INotifyIcon>();
+            var viewModel = new MainWindowViewModel(null, factoryMock, null, notifyIconMock);
 
             var wasPropertyChangedCalled = false;
 
@@ -40,7 +41,8 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var categoryMock = MockRepository.GenerateMock<IFilteredApplicationCategory>();
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
             factoryMock.Stub(x => x.Build()).Return(new [] { categoryMock });
-            var viewModel = new MainWindowViewModel(null, factoryMock, null);
+            var notifyIconMock = MockRepository.GenerateMock<INotifyIcon>();
+            var viewModel = new MainWindowViewModel(null, factoryMock, null, notifyIconMock);
 
             categoryMock.AssertWasNotCalled(x => x.Filter);
 
@@ -55,7 +57,8 @@ namespace SteamLauncher.UI.Tests.ViewModels
         {
             var steamProxyMock = MockRepository.GenerateMock<ISteamProxy>();
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
-            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock, null);
+            var notifyIconMock = MockRepository.GenerateMock<INotifyIcon>();
+            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock, null, notifyIconMock);
 
             viewModel.Launch(null);
 
@@ -69,11 +72,27 @@ namespace SteamLauncher.UI.Tests.ViewModels
             var applicationMock = MockRepository.GenerateMock<IApplication>();
             applicationMock.Stub(x => x.Id).Return(8);
             var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
-            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock, null);
+            var notifyIconMock = MockRepository.GenerateMock<INotifyIcon>();
+            var viewModel = new MainWindowViewModel(steamProxyMock, factoryMock, null, notifyIconMock);
 
             viewModel.Launch(applicationMock);
 
             steamProxyMock.AssertWasCalled(x => x.LaunchApp(applicationMock.Id), c => c.Repeat.Once());
+        }
+
+        [TestCase(NotifyIconActions.ShowMainUI, true)]
+        [TestCase(NotifyIconActions.ExitApplication, false)]
+        [TestCase(NotifyIconActions.ShowSettingsUI, false)]
+        public void IsVisibleIsTrueOnlyWhenNotifyIconNotifiesWithShowMainUI(NotifyIconActions action, bool expectedVisibility)
+        {
+            var factoryMock = MockRepository.GenerateMock<IFilteredApplicationCategoryFactory>();
+            factoryMock.Stub(x => x.Build()).Return(new IFilteredApplicationCategory[] { });
+            var notifyIconMock = MockRepository.GenerateMock<INotifyIcon>();
+            var viewModel = new MainWindowViewModel(null, factoryMock, null, notifyIconMock);
+
+            notifyIconMock.Raise(x => x.ItemSelected += delegate { }, action.GetDescription());
+
+            Assert.AreEqual(expectedVisibility, viewModel.IsVisible);
         }
     }
 }

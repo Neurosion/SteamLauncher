@@ -120,5 +120,10 @@ namespace SteamLauncher.Domain.Input
 
             return output;
         }
+
+        public void Parse(string value)
+        {
+
+        }
     }
 }

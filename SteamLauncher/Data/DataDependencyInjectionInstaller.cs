@@ -20,30 +20,32 @@ namespace SteamLauncher.Domain.Data
 
         public override void Install(IWindsorContainer container, IConfigurationStore store)
         {
-            container.Register(Component.For<IConfigurationResourceLocator>()
-                                        .ImplementedBy<ConfigurationResourceLocator>()
-                                        .DependsOn(Dependency.OnValue("directory", ApplicationsPath),
-                                                   Dependency.OnValue("fileExtension", ApplicationConfigurationFileExtension))
-                                        .Named("ApplicationConfigurationResourceLocator"));
+            container.Register(
+                    Component.For<IConfigurationResourceLocator>()
+                             .ImplementedBy<ConfigurationResourceLocator>()
+                             .DependsOn(Dependency.OnValue("directory", ApplicationsPath),
+                                        Dependency.OnValue("fileExtension", ApplicationConfigurationFileExtension))
+                             .Named("ApplicationConfigurationResourceLocator"),
 
-            container.Register(Component.For<IConfigurationResourceWatcher>()
-                                        .ImplementedBy<ConfigurationResourceWatcher>()
-                                        .DependsOn(Dependency.OnValue("path", ApplicationsPath),
-                                                   Dependency.OnValue("filter", ApplicationConfigurationFileFilter))
-                                        .Named("ApplicationConfigurationResourceWatcher"));
+                    Component.For<IConfigurationResourceWatcher>()
+                             .ImplementedBy<ConfigurationResourceWatcher>()
+                             .DependsOn(Dependency.OnValue("path", ApplicationsPath),
+                                        Dependency.OnValue("filter", ApplicationConfigurationFileFilter))
+                             .Named("ApplicationConfigurationResourceWatcher"),
 
-            container.Register(Component.For<IWatchingConfigurationRepository>()
-                                        .ImplementedBy<WatchingConfigurationRepository>()
-                                        .DependsOn(Dependency.OnComponent(typeof(IConfigurationResourceLocator), "ApplicationConfigurationResourceLocator"),
-                                                   Dependency.OnComponent(typeof(IConfigurationResourceWatcher), "ApplicationConfigurationResourceWatcher"))
-                                        .Named("ApplicationConfigurationRepository"));
+                    Component.For<IWatchingConfigurationRepository>()
+                             .ImplementedBy<WatchingConfigurationRepository>()
+                             .DependsOn(Dependency.OnComponent(typeof(IConfigurationResourceLocator), "ApplicationConfigurationResourceLocator"),
+                                        Dependency.OnComponent(typeof(IConfigurationResourceWatcher), "ApplicationConfigurationResourceWatcher"))
+                             .Named("ApplicationConfigurationRepository"),
 
-            container.Register(Component.For<IApplicationRepository>()
-                                        .ImplementedBy<InstalledApplicationRepository>()
-                                        .DependsOn(Dependency.OnComponent(typeof(IWatchingConfigurationRepository), "ApplicationConfigurationRepository")));
+                    Component.For<IApplicationRepository>()
+                             .ImplementedBy<InstalledApplicationRepository>()
+                             .DependsOn(Dependency.OnComponent(typeof(IWatchingConfigurationRepository), "ApplicationConfigurationRepository")),
 
-            container.Register(Component.For<IUserRepository>()
-                                        .ImplementedBy<UserRepository>());
+                    Component.For<IUserRepository>()
+                             .ImplementedBy<UserRepository>()
+                             );
         }
     }
 }
