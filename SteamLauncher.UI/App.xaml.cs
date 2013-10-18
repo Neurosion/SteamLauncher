@@ -19,10 +19,20 @@ namespace SteamLauncher.UI
 
         public App()
         {
-            _diConfiguration = new DependencyInjectionConfiguration();
-            _model = _diConfiguration.Container.Resolve<IApplicationModel>();
-            _model.Exited += () => this.Shutdown();
-            Startup += (s, e) => _model.Start();
+            try
+            {
+                _diConfiguration = new DependencyInjectionConfiguration();
+                _model = _diConfiguration.Container.Resolve<IApplicationModel>();
+                Startup += (s, e) => _model.Start();
+                _model.Exited += () => Shutdown();
+
+                //DispatcherUnhandledException += (s, e) => _errorHandler.Handle(e);
+            }
+            catch (Exception ex)
+            {
+                // handle here
+                // _errorHandler.Handle(ex);
+            }
         }
     }
 }
