@@ -16,11 +16,30 @@ namespace SteamLauncher.UI.Views
     /// <summary>
     /// Interaction logic for ErrorDialog.xaml
     /// </summary>
-    public partial class ErrorDialog : Window
+    public partial class ErrorDialog : Window, IErrorDialogView
     {
+        public string Title
+        {
+            get { return "Application Error"; }
+        }
+
+        public string ErrorMessage { get; private set; }
+
         public ErrorDialog()
         {
             InitializeComponent();
+        }
+
+        public void Show(string errorMessage)
+        {
+            this.ErrorMessage = errorMessage;
+            Show();
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            ErrorMessage = string.Empty;
+            Hide();
         }
     }
 }

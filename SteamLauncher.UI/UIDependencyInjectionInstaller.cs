@@ -10,6 +10,7 @@ using SteamLauncher.UI.ViewModels;
 using SteamLauncher.UI.Models;
 using SteamLauncher.UI.Core;
 using SteamLauncher.Domain;
+using SteamLauncher.Domain.ErrorHandling;
 
 namespace SteamLauncher.UI
 {
@@ -33,6 +34,9 @@ namespace SteamLauncher.UI
                 Component.For<ISettingsView>()
                          .ImplementedBy<SettingsWindow>(),
 
+                Component.For<IErrorDialogView>()
+                         .ImplementedBy<ErrorDialog>(),
+
                 Component.For<INotifyIcon>()
                          .ImplementedBy<NotifyIconWrapper>()
                          .DependsOn(Dependency.OnResource<SteamLauncher.UI.Properties.Resources>("icon", "NotificationIcon"))
@@ -40,7 +44,12 @@ namespace SteamLauncher.UI
                                                                     .Cast<NotifyIconActions>()
                                                                     .ForEach(a => n.Items.Add(a.GetDescription())))),
                 Component.For<IApplicationModel>()
-                         .ImplementedBy<ApplicationModel>()
+                         .ImplementedBy<ApplicationModel>(),
+
+                Component.For<IErrorHandler>()
+                         .UsingFactoryMethod((k, c) => new CompositeErrorHandler(new LoggingErrorHandler(Dependency.OnAppSettingsValue("Log.Path").Value, 
+                                                                                                         Dependency.OnAppSettingsValue("Log.File").Value),
+                                                                                 new UserNotifyingErrorHandler(k.Resolve<IErrorDialogView>())))
                               );
         }
     }

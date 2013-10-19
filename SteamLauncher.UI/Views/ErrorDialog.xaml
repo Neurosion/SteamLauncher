@@ -17,6 +17,6 @@
         <TextBlock Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
                    Text="{Binding ErrorMessage}" />
         <Button Grid.Row="2" Grid.Column="2" 
-                Content="OK" Command="{Binding OKCommand}" />
+                Content="OK" Click="OKButton_Click" />
     </Grid>
 </Window>

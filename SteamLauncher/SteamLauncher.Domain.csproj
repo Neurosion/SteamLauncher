@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ErrorHandling\CompositeErrorHandler.cs" />
     <Compile Include="ErrorHandling\ErrorHandlerBase.cs" />
     <Compile Include="ErrorHandling\DelegatingErrorHandler.cs" />
     <Compile Include="Launching\CommandLineSteamProxy.cs" />
