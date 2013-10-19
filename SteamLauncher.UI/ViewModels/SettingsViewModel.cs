@@ -32,6 +32,7 @@ namespace SteamLauncher.UI.ViewModels
                 {
                     _isVisible = value;
                     PropertyChanged.Notify();
+                    Reset();
                 }
             }
         }
@@ -82,12 +83,6 @@ namespace SteamLauncher.UI.ViewModels
         public SettingsViewModel(IHotKey hotKey)
         {
             _hotKey = hotKey;
-            Reset();
-        }
-
-        public void Close()
-        {
-            IsVisible = false;
             Reset();
         }
 

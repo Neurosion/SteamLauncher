@@ -7,7 +7,6 @@ namespace SteamLauncher.UI.Views
 {
     public interface IErrorDialogView
     {
-        string Title { get; }
         string ErrorMessage { get; }
         void Show(string errorMessage);
     }

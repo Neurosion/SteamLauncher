@@ -49,6 +49,7 @@ namespace SteamLauncher.UI.ViewModels
                 {
                     _isVisible = value;
                     PropertyChanged.Notify();
+                    Reset();
                 }
             }
         }
@@ -70,12 +71,6 @@ namespace SteamLauncher.UI.ViewModels
         {
             if (application != null)
                 _steamProxy.LaunchApp(application.Id);
-        }
-
-        public void Close()
-        {
-            IsVisible = false;
-            Reset();
         }
 
         private void Reset()

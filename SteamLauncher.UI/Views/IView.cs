@@ -2,7 +2,7 @@
 using System.Linq;
 using SteamLauncher.UI.ViewModels;
 
-namespace SteamLauncher.UI.ViewModels
+namespace SteamLauncher.UI.Views
 {
     public interface IView<T>
     {

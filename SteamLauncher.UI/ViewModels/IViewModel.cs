@@ -10,6 +10,5 @@ namespace SteamLauncher.UI.ViewModels
     {
         string Title { get; }
         bool IsVisible { get; set; }
-        void Close();
     }
 }

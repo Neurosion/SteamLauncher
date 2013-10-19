@@ -1,6 +1,9 @@
-﻿<Window x:Class="SteamLauncher.UI.Views.MainWindow"
+﻿<Views:WindowBase x:Class="SteamLauncher.UI.Views.MainWindow"
+        x:TypeArguments="ViewModels:IMainViewModel"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
+        xmlns:Views="clr-namespace:SteamLauncher.UI.Views"
+        xmlns:ViewModels="clr-namespace:SteamLauncher.UI.ViewModels"
         xmlns:Core="clr-namespace:SteamLauncher.UI.Core"
         Title="{Binding Title}" MinWidth="200" MaxHeight="1000" SizeToContent="WidthAndHeight"
         WindowStyle="None" ResizeMode="NoResize" Background="Black"
@@ -35,4 +38,4 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
     </StackPanel>
-</Window>
+</Views:WindowBase>

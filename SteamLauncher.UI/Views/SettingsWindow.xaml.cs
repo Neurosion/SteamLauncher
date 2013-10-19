@@ -18,23 +18,12 @@ namespace SteamLauncher.UI.Views
     /// <summary>
     /// Interaction logic for SettingsWindow.xaml
     /// </summary>
-    public partial class SettingsWindow : Window, ISettingsView
+    public partial class SettingsWindow : WindowBase<ISettingsViewModel>, ISettingsView
     {
-        public ISettingsViewModel ViewModel
-        {
-            get { return (ISettingsViewModel)DataContext; }
-        }
-
         public SettingsWindow(ISettingsViewModel viewModel)
+            :base(viewModel)
         {
             InitializeComponent();
-            DataContext = viewModel;
-        }
-
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            ViewModel.Close();
         }
     }
 }

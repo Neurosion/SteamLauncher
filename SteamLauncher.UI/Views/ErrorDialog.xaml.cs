@@ -18,11 +18,6 @@ namespace SteamLauncher.UI.Views
     /// </summary>
     public partial class ErrorDialog : Window, IErrorDialogView
     {
-        public string Title
-        {
-            get { return "Application Error"; }
-        }
-
         public string ErrorMessage { get; private set; }
 
         public ErrorDialog()
