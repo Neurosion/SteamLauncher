@@ -5,12 +5,14 @@ using System.Linq;
 using Castle.Windsor;
 using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.SubSystems.Configuration;
+using Castle.Facilities.TypedFactory;
 using SteamLauncher.UI.Views;
 using SteamLauncher.UI.ViewModels;
 using SteamLauncher.UI.Models;
 using SteamLauncher.UI.Core;
 using SteamLauncher.Domain;
 using SteamLauncher.Domain.ErrorHandling;
+using Application = System.Windows.Application;
 
 namespace SteamLauncher.UI
 {
@@ -18,24 +20,37 @@ namespace SteamLauncher.UI
     {
         public void Install(IWindsorContainer container, IConfigurationStore store)
         {
+            container.AddFacility<TypedFactoryFacility>();
+
             container.Register(
                 Component.For<IFilteredApplicationCategoryFactory>()
                          .ImplementedBy<FilteredApplicationCategoryFactory>(),
 
                 Component.For<IMainViewModel>()
-                         .ImplementedBy<MainWindowViewModel>(),
+                         .ImplementedBy<MainWindowViewModel>()
+                         .LifeStyle.Transient,
 
                 Component.For<IMainView>()
-                         .ImplementedBy<MainWindow>(),
+                         .ImplementedBy<MainWindow>()
+                         .LifeStyle.Transient,
+
+                Component.For<IMainViewFactory>()
+                         .AsFactory(),
 
                 Component.For<ISettingsViewModel>()
-                         .ImplementedBy<SettingsViewModel>(),
+                         .ImplementedBy<SettingsViewModel>()
+                         .LifeStyle.Transient,
 
                 Component.For<ISettingsView>()
-                         .ImplementedBy<SettingsWindow>(),
+                         .ImplementedBy<SettingsWindow>()
+                         .LifeStyle.Transient,
+
+                Component.For<ISettingsViewFactory>()
+                         .AsFactory(),
 
                 Component.For<IErrorDialogView>()
-                         .ImplementedBy<ErrorDialog>(),
+                         .ImplementedBy<ErrorDialog>()
+                         .LifeStyle.Transient,
 
                 Component.For<INotifyIcon>()
                          .ImplementedBy<NotifyIconWrapper>()

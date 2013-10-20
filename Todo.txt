@@ -1,10 +1,5 @@
-Add exception handler to handle exceptions, including global exceptions.
 Hook up hot keys to toggle visibility of the application.
-Make the application hide when a steam application is launched.
-Make the filter empty when a the application is hidden.
 Applications are not loading the correct set, some are not installed, others are not showing up at all.
-Add notification icon (System.Windows.Forms.NotifyIcon)
-	Context menu: Show, Settings (configure hot key combo), Exit
 Refactor applications to have a SteamApplication that takes a SteamProxy in the constructor rather than passing all apps to proxy
 	This will allow having OriginApplication, DesuraApplication, CustomApplication, etc.
 
@@ -14,6 +9,11 @@ Notes:
 Tests:
 	Test ViewModel launch activation under MainWindow
 	Test MainWindowViewModel with hot key
+	Error handlers
+	NotifyIcon
+	Application Model
+	Settings view model
+	Main view model
 
 Future:
 	Add Origin support

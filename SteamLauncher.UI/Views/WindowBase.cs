@@ -31,14 +31,7 @@ namespace SteamLauncher.UI.Views
         public WindowBase(T viewModel)
         {
             DataContext = viewModel;
-        }
-
-        // HACK: This is here because the OnPropertyChanged delegate is not 
-        // handling the event notification when the window is in a closing state.
-        protected override void OnClosing(CancelEventArgs e)
-        {
-            e.Cancel = true;
-            Hide();
+            viewModel.Closed += x => Close();
         }
     }
 }

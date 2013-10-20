@@ -9,6 +9,6 @@ namespace SteamLauncher.UI.ViewModels
     public interface IViewModel : INotifyPropertyChanged
     {
         string Title { get; }
-        bool IsVisible { get; set; }
+        event Action<IViewModel> Closed;
     }
 }

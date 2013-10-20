@@ -73,6 +73,9 @@
       <DependentUpon>ErrorDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\IErrorDialogView.cs" />
+    <Compile Include="Views\IMainViewFactory.cs" />
+    <Compile Include="Views\ISettingsViewFactory.cs" />
+    <Compile Include="Views\IViewFactory.cs" />
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>

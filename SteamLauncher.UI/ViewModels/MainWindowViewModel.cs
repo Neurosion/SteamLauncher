@@ -15,7 +15,6 @@ namespace SteamLauncher.UI.ViewModels
     public class MainWindowViewModel : IMainViewModel
     {
         private string _filter;
-        private bool _isVisible;
         private ISteamProxy _steamProxy;
         private IHotKey _hotKey;
 
@@ -40,42 +39,26 @@ namespace SteamLauncher.UI.ViewModels
             }
         }
 
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set
-            {
-                if (_isVisible != value)
-                {
-                    _isVisible = value;
-                    PropertyChanged.Notify();
-                    Reset();
-                }
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public event Action<IViewModel> Closed = delegate { };
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public MainWindowViewModel(ISteamProxy steamProxy, IFilteredApplicationCategoryFactory applicationCategoryFactory, IHotKey hotKey, INotifyIcon notifyIcon)
+        public MainWindowViewModel(ISteamProxy steamProxy, IFilteredApplicationCategoryFactory applicationCategoryFactory, IHotKey hotKey)
         {
             _steamProxy = steamProxy;
             ApplicationCategories = applicationCategoryFactory.Build();
             _hotKey = hotKey;
             //_hotKey.Enable();
-            notifyIcon.ItemSelected += n => IsVisible = n.Equals(NotifyIconActions.ShowMainUI.GetDescription(), 
-                                                                StringComparison.OrdinalIgnoreCase);
-            Reset();
+
+            _filter = string.Empty;
         }
 
         public void Launch(IApplication application)
         {
             if (application != null)
+            {
                 _steamProxy.LaunchApp(application.Id);
-        }
-
-        private void Reset()
-        {
-            Filter = string.Empty;
+                Closed(this);
+            }
         }
     }
 }

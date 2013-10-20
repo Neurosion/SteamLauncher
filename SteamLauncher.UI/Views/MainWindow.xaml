@@ -9,7 +9,7 @@
         WindowStyle="None" ResizeMode="NoResize" Background="Black"
         Visibility="{Binding Path=IsVisible, Converter={Core:BoolToVisibilityValueConverter}, Mode=TwoWay}">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <TextBox Text="{Binding Path=Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" TabIndex="0" />
+        <TextBox Text="{Binding Path=Filter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" HorizontalAlignment="Stretch" TabIndex="0" />
             <ItemsControl ItemsSource="{Binding ApplicationCategories}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" TabIndex="1">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

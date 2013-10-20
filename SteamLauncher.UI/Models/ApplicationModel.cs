@@ -15,12 +15,12 @@ namespace SteamLauncher.UI.Models
         public event Action Started = delegate { };
         public event Action Exited = delegate { };
 
-        public ApplicationModel(INotifyIcon notifyIcon, IMainView mainView, ISettingsView settingsView)
+        public ApplicationModel(INotifyIcon notifyIcon, IMainViewFactory mainViewFactory, ISettingsViewFactory settingsViewFactory)
         {
             _notifyItemSelectedActions = new Dictionary<string, Action>()
             {
-                { NotifyIconActions.ShowMainUI.GetDescription(), () => mainView.Show() },
-                { NotifyIconActions.ShowSettingsUI.GetDescription(), () => settingsView.Show() },
+                { NotifyIconActions.ShowMainUI.GetDescription(), () => mainViewFactory.Build().Show() },
+                { NotifyIconActions.ShowSettingsUI.GetDescription(), () => settingsViewFactory.Build().Show() },
                 { NotifyIconActions.ExitApplication.GetDescription(), () => Exit() }
             };
 

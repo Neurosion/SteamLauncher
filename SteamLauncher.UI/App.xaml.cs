@@ -9,6 +9,7 @@ using SteamLauncher.Domain.Configuration;
 using SteamLauncher.UI.Views;
 using SteamLauncher.UI.Core;
 using SteamLauncher.UI.Models;
+using SteamLauncher.Domain.ErrorHandling;
 
 namespace SteamLauncher.UI
 {
@@ -16,22 +17,27 @@ namespace SteamLauncher.UI
     {
         private DependencyInjectionConfiguration _diConfiguration;
         private IApplicationModel _model;
+        private IErrorHandler _errorHandler;
 
         public App()
         {
+            _diConfiguration = new DependencyInjectionConfiguration();
+            _errorHandler = _diConfiguration.Container.Resolve<IErrorHandler>();
+
             try
             {
-                _diConfiguration = new DependencyInjectionConfiguration();
                 _model = _diConfiguration.Container.Resolve<IApplicationModel>();
                 Startup += (s, e) => _model.Start();
                 _model.Exited += () => Shutdown();
 
-                //DispatcherUnhandledException += (s, e) => _errorHandler.Handle(e);
+                DispatcherUnhandledException += (s, e) => e.Handled = _errorHandler.Handle(e.Exception);
             }
             catch (Exception ex)
             {
-                // handle here
-                // _errorHandler.Handle(ex);
+                if (_errorHandler == null)
+                    throw;
+                
+                _errorHandler.Handle(ex);
             }
         }
     }

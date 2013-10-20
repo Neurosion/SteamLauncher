@@ -11,7 +11,6 @@ namespace SteamLauncher.UI.ViewModels
 {
     public class SettingsViewModel : ISettingsViewModel
     {
-        private bool _isVisible;
         private bool _isValid;
         private IHotKey _hotKey;
         private IHotKey _editingHotKey;
@@ -21,20 +20,6 @@ namespace SteamLauncher.UI.ViewModels
         public string Title
         {
             get { return "Settings"; }
-        }
-
-        public bool IsVisible
-        {
-            get { return _isVisible; }
-            set
-            {
-                if (_isVisible != value)
-                {
-                    _isVisible = value;
-                    PropertyChanged.Notify();
-                    Reset();
-                }
-            }
         }
 
         public string HotKeyString
@@ -78,18 +63,14 @@ namespace SteamLauncher.UI.ViewModels
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged = delegate { };
+        public event Action<IViewModel> Closed = delegate { };
 
         public SettingsViewModel(IHotKey hotKey)
         {
             _hotKey = hotKey;
-            Reset();
-        }
-
-        private void Reset()
-        {
             _editingHotKey = _hotKey;
-            IsValid = true;
+            Validate();
         }
 
         private void Validate()
@@ -100,12 +81,15 @@ namespace SteamLauncher.UI.ViewModels
         private void Save()
         {
             if (IsValid)
-                IsVisible = false;
+            {
+                _hotKey = _editingHotKey;
+                Closed(this);
+            }
         }
 
         private void Cancel()
         {
-            IsVisible = false;
+            Closed(this);
         }
     }
 }
